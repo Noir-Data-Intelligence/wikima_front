@@ -1,0 +1,460 @@
+================================================================================
+ WiKima — ENTREGA DO FRONTEND E GUIA COMPLETO PARA A EQUIPA DE BACKEND
+================================================================================
+ Documento de handoff · Última atualização: 2026-07-03
+ App: WiKima — plataforma SaaS de gestão administrativa (React + Vite)
+ Estado: FRONTEND funcionalmente completo. BACKEND por construir.
+--------------------------------------------------------------------------------
+
+ÍNDICE
+  PARTE A — O QUE FOI FEITO NO FRONTEND
+    A1. Visão geral e objetivo
+    A2. Stack técnica
+    A3. Identidade visual / design system
+    A4. Fases concluídas (0 a 6)
+    A5. Pendências menores conhecidas (não bloqueiam o backend)
+
+  PARTE B — GUIA PARA A EQUIPA DE BACKEND (o mais importante)
+    B1. Como o frontend fala com o backend (arquitetura src/api/)
+    B2. Contrato REST — convenção geral
+    B3. Contrato REST — Autenticação (/auth/*)
+    B4. Contrato REST — Entidades CRUD (/{recurso})
+    B5. Contrato REST — Integrações, Functions, Agents, App
+    B6. Modelo de dados (40 entidades)
+    B7. Multi-tenancy (workspace_id) — LER COM ATENÇÃO
+    B8. Formato de erros esperado pelo frontend
+    B9. Variáveis de ambiente e como ligar o backend
+    B10. Modo MOCK (como está a correr hoje e como desligar)
+    B11. Decisões em aberto (a equipa de backend decide)
+    B12. Ordem de implementação sugerida
+    B13. Checklist de arranque
+
+================================================================================
+ PARTE A — O QUE FOI FEITO NO FRONTEND
+================================================================================
+
+A1. VISÃO GERAL E OBJETIVO
+--------------------------------------------------------------------------------
+A app foi originalmente exportada da plataforma no-code "Base44" e todo o acesso
+a dados passava pelo SDK @base44/sdk. Foram feitos DOIS grandes trabalhos:
+
+  1) MIGRAÇÃO: remoção total da dependência do Base44. Foi criada uma camada de
+     API PRÓPRIA em src/api/ (fetch nativo, sem SDK), agnóstica ao backend e
+     preparada para uma arquitetura de microserviços REST. Todos os ~82 ficheiros
+     que usavam `base44.*` passaram a usar `api.*`.
+
+  2) REDESIGN: redesenho completo do frontend in-place — tema escuro por defeito
+     com alternância claro/sistema, nova identidade de marca (laranja), tipografia
+     Sora/Inter, internacionalização (PT/EN) e limpeza/polish de todos os módulos.
+
+O backend AINDA NÃO EXISTE. Hoje a app corre em "modo mock" (ver B10) para poder
+ser navegada e validada. O objetivo deste documento é dar à equipa de backend tudo
+o que precisa para construir a API que o frontend já espera.
+
+
+A2. STACK TÉCNICA
+--------------------------------------------------------------------------------
+  - React 18 + Vite 6 (build: `npm run build`; dev: `npm run dev` → porta 5173)
+  - React Router v6 (rotas aninhadas, URLs REST em minúsculas: /clients, /tasks…)
+  - Tailwind CSS 3 + shadcn/ui (Radix primitives) — darkMode: ["class"]
+  - Estado de servidor: @tanstack/react-query (v5)
+  - Tabelas: @tanstack/react-table · Gráficos: Recharts · Forms: react-hook-form + zod
+  - i18n: i18next + react-i18next (PT/EN)
+  - Tema: next-themes (defaultTheme=dark)
+  - Tipografia self-hosted: @fontsource/sora (display) + @fontsource/inter (corpo)
+  - HTTP: fetch nativo (SEM axios, SEM SDK) — ver src/api/http.js
+
+  NOTA: o package.json ainda tem "name": "base44-app" (cosmético) e NÃO tem
+  qualquer dependência @base44/* — a migração está completa.
+
+
+A3. IDENTIDADE VISUAL / DESIGN SYSTEM
+--------------------------------------------------------------------------------
+  - Tema PADRÃO = ESCURO. Alternância Claro / Escuro / Sistema (ThemeToggle).
+  - Cor primária (marca) = LARANJA  #E88134
+  - Base navy = #1A206A
+  - Tipografia: Sora (títulos/display) + Inter (corpo)
+  - Tokens de tema em src/index.css:  :root (claro)  +  .dark (escuro).
+    Classes semânticas Tailwind: bg-background, bg-card, bg-muted, bg-accent,
+    text-foreground, text-muted-foreground, border-border, primary, etc.
+  - REGRA: usar SEMPRE tokens (não cores hardcoded), para funcionar nos dois temas.
+    Exceção: texto sobre imagem/overlay ESCURO FIXO (heróis das páginas públicas)
+    usa branco literal de propósito.
+  - Cores "semânticas" (verde=sucesso, vermelho=erro, âmbar=aviso, azul=info,
+    e paletas categóricas de badges) foram MANTIDAS de propósito — não são a cor
+    de marca.
+
+
+A4. FASES CONCLUÍDAS (0 a 6)
+--------------------------------------------------------------------------------
+  FASE 0 — Fundações: tokens de tema (claro+escuro), fontes, next-themes, i18next,
+           assets de marca. Remoção do lixo do editor visual do Base44.
+  FASE 1 — Componentes base: layout (AppShell, Sidebar, Topbar, PageHeader,
+           UserMenu, WorkspaceSwitcher, LanguageSwitcher, ThemeToggle), marca
+           (Logo, WaveMark, Spinner), dados (StatCard, ChartCard, DataTable,
+           EmptyState). Preview em /design.
+  FASE 2 — Autenticação (Login/Register/Forgot/Reset em split-screen) + páginas
+           públicas (Landing/About/Features/Plans) redesenhadas com a marca.
+           Onboarding reescrito.
+  FASE 3 — Estrutura da app: AppLayout (guard de auth + onboarding + providers) e
+           App.jsx com rotas REST minúsculas. As 34 páginas da app perderam o
+           "chrome" antigo e passaram a renderizar dentro do AppShell.
+  RE-TEMA — ~3283 substituições de cores hardcoded → tokens em 132 ficheiros.
+  FASE 4/5 — Polish: todos os módulos full-width; formulários alargados e em
+           2 colunas; correção do crash da Agenda (colisão de variável com locale
+           do date-fns); re-tema de Mensagens e Suporte; identidade laranja no
+           formulário de Clientes e no módulo Documentos.
+  FASE 6 — QA VISUAL (claro + escuro) de todas as 21 páginas da app + passagem de
+           i18n dedicada. Corrigido: Definições (separador azul→laranja), Perfil
+           (banner e botões), tokenização completa do módulo Finanças Pessoais e
+           do Histórico de Transações (deixaram de ficar escuros no modo claro),
+           subtítulos que estavam só em inglês. App validada nos dois temas e
+           ~100% em português.
+
+  Detalhe fino de cada fase está registado no histórico do projeto; o essencial
+  para o backend está todo neste documento (Parte B).
+
+
+A5. PENDÊNCIAS MENORES CONHECIDAS (não bloqueiam o backend)
+--------------------------------------------------------------------------------
+  - React.StrictMode está DESLIGADO (reativar quando as páginas estabilizarem).
+  - src/assets/brand/wave-bg.jpg tem ~18MB — otimizar antes de usar no herói.
+  - O bundle JS passa dos 500KB (aviso do Vite) — considerar code-splitting/lazy
+    das páginas e manualChunks quando houver tempo.
+  - package.json "name" ainda é "base44-app" (cosmético).
+  Nenhuma destas afeta a construção do backend.
+
+
+================================================================================
+ PARTE B — GUIA PARA A EQUIPA DE BACKEND
+================================================================================
+
+B1. COMO O FRONTEND FALA COM O BACKEND (arquitetura src/api/)
+--------------------------------------------------------------------------------
+Toda a comunicação passa por uma única camada em src/api/. NÃO é preciso mexer
+nos componentes/páginas — eles consomem sempre o objeto `api`:
+
+    import { api } from '@/api/client';
+    api.entities.Client.filter({ workspace_id })   // dados de negócio (CRUD)
+    api.auth.me()                                    // autenticação
+    api.integrations.Core.UploadFile({ file })      // integrações
+    api.functions.invoke('syncGmail', payload)       // funções serverless
+    api.agents.createConversation(payload)           // agentes conversacionais
+    api.app.getPublicSettings()                      // metadados da app
+
+Ficheiros da camada (todos comentados em detalhe):
+    src/api/config.js       → resolve as base URLs (VITE_API_URL, default '/api').
+                              Suporta apontar recursos a microserviços diferentes
+                              (serviceBaseUrls) sem mudar chamadas.
+    src/api/tokenStore.js   → guarda o token de auth (hoje: Bearer em localStorage).
+                              ÚNICO ficheiro a mudar se optarem por cookie httpOnly.
+    src/api/http.js         → wrapper fetch: get/post/put/patch/del, JSON+multipart,
+                              injeta Authorization: Bearer <token>, e normaliza
+                              TODOS os erros num ApiError { status, data, message }.
+    src/api/resource.js     → createResource(path): CRUD REST genérico por recurso.
+    src/api/entities.js     → gera um cliente REST por entidade (40 entidades).
+    src/api/auth.js         → serviço de autenticação.
+    src/api/integrations.js → upload de ficheiros, LLM, email/SMS, imagem, extração.
+    src/api/functions.js    → invoke(name, payload) → POST /functions/{name}.
+    src/api/agents.js       → conversas de agente (subscribe via polling; trocar
+                              por SSE/WebSocket quando existir).
+    src/api/client.js       → monta e exporta `api = { entities, auth, integrations,
+                              functions, agents, app, appLogs }`.
+    src/api/mock.js         → implementação MOCK usada enquanto não há backend (B10).
+
+REGRA DE OURO PARA O BACKEND: implementem os endpoints que estas chamadas esperam
+(secções B2–B5) e a app funciona sem alterar UI. Se a vossa convenção de nomes de
+rotas for diferente, há UM ponto único para adaptar por tipo (ex.: `toPath` em
+entities.js para o padrão dos recursos) — ver B4.
+
+
+B2. CONTRATO REST — CONVENÇÃO GERAL
+--------------------------------------------------------------------------------
+  - Base URL: definida por VITE_API_URL (default '/api'). Em dev, o Vite faz proxy
+    de '/api' para VITE_API_PROXY_TARGET (default http://localhost:8000) — logo o
+    browser fala sempre same-origin e NÃO há problemas de CORS em dev.
+  - Autenticação: header `Authorization: Bearer <token>` em todos os pedidos que
+    tenham token guardado (ver B3/B7).
+  - Corpo: JSON (Content-Type: application/json). Uploads: multipart/form-data.
+  - Respostas: JSON. Content-Type deve incluir application/json.
+  - Campos automáticos que o backend DEVE devolver em cada registo:
+        id           (string) — chave primária
+        created_date (string ISO 8601) — usado para ordenação por defeito
+    (Estes nomes vêm da convenção original; manter reduz alterações no frontend.)
+  - Datas: strings ISO ("2026-07-03" para date, "2026-07-03T10:00:00Z" p/ datetime).
+  - Moeda/valores: números (não strings).
+
+
+B3. CONTRATO REST — AUTENTICAÇÃO  (src/api/auth.js)
+--------------------------------------------------------------------------------
+Método frontend                         → Endpoint esperado
+  api.auth.me()                          → GET  /auth/me            → devolve o User
+  api.auth.updateMe(data)                → PUT  /auth/me            → User atualizado
+  api.auth.loginViaEmailPassword(e, p)   → POST /auth/login         → { access_token, user }
+  api.auth.register(data)                → POST /auth/register      → { access_token?, requires_otp?, user? }
+  api.auth.verifyOtp(data)               → POST /auth/verify-otp    → { access_token, user }
+  api.auth.resendOtp(email)              → POST /auth/resend-otp    → { ok:true }
+  api.auth.resetPasswordRequest(email)   → POST /auth/reset-password/request → { ok:true }
+  api.auth.resetPassword(data)           → POST /auth/reset-password → { ok:true }
+  api.auth.loginWithProvider(prov, next) → REDIRECT p/ {API}/auth/oauth/{provider}?next=...
+  api.auth.logout()                      → apenas limpa o token no cliente (sem chamada)
+
+Notas:
+  - O login guarda `res.access_token` automaticamente (tokenStore). O backend deve
+    devolver esse campo. Para OTP, o token vem no verifyOtp.
+  - `GET /auth/me` é a chamada central: o guard da app chama-a no arranque. Deve
+    devolver o objeto User COMPLETO (ver campos em B6 e no schema User.jsonc),
+    incluindo pelo menos: id, email, full_name, role, user_profile,
+    onboarding_completed, current_workspace_id, default_workspace_id.
+  - 401/403 em /auth/me = token inválido/expirado → o frontend trata como
+    "auth_required" e manda para /login.
+  - OAuth: o frontend faz um redirect de browser para {API}/auth/oauth/{provider}.
+    O backend trata o fluxo e no fim redireciona de volta para a app (ex.: /dashboard)
+    já com sessão/token. Há páginas de callback Gmail no frontend (ver B5/functions).
+
+
+B4. CONTRATO REST — ENTIDADES CRUD  (src/api/resource.js + entities.js)
+--------------------------------------------------------------------------------
+Cada entidade é um recurso REST. O caminho é derivado do nome em kebab-case
+SINGULAR:  BankAccount → "bank-account",  Client → "client",  TaskComment →
+"task-comment".  (Se o backend preferir plural ou snake_case, mudar APENAS a
+função `toPath` em src/api/entities.js — um só sítio.)
+
+Para um recurso {path}, os métodos mapeiam assim:
+
+  Método frontend                 HTTP + rota                 Resposta esperada
+  ---------------------------------------------------------------------------------
+  .list(sort, limit)              GET  /{path}?sort&limit     ARRAY de registos
+  .filter(criteria, sort, limit)  GET  /{path}?<criteria>...  ARRAY de registos
+  .get(id)                        GET  /{path}/{id}           1 registo (objeto)
+  .create(data)                   POST /{path}                registo criado (c/ id)
+  .update(id, data)               PUT  /{path}/{id}           registo atualizado
+  .delete(id)                     DELETE /{path}/{id}         { success:true } (ou 204)
+
+Detalhes CRÍTICOS de query (ver toQueryString em src/api/http.js):
+  - `filter(criteria)` envia cada par chave=valor como query param de IGUALDADE.
+      Ex.: api.entities.Task.filter({ workspace_id:'w1', status:'todo' })
+           → GET /task?workspace_id=w1&status=todo
+  - Arrays viram parâmetros repetidos:  { id:['a','b'] } → ?id=a&id=b
+  - Objetos aninhados viram JSON string no valor do parâmetro.
+  - Ordenação: parâmetro `sort`. Convenção de sinal:
+        sort=-date          → descendente por 'date'
+        sort=next_due_date  → ascendente
+    (O frontend usa muito '-created_date', '-date', '-month', 'next_due_date'.)
+  - `limit` limita o nº de resultados.
+  - list()/filter() DEVEM devolver sempre um ARRAY (mesmo vazio []), NUNCA null.
+
+Exemplos reais usados no código:
+    api.entities.Expense.filter({ workspace_id }, '-date')
+    api.entities.Invoice.filter({ workspace_id, status:'sent' })
+    api.entities.WorkspaceMember.filter({ workspace_id, user_email })
+    api.entities.Client.create({ workspace_id, name, email, ... })
+    api.entities.Task.update(id, { status:'completed' })
+
+
+B5. CONTRATO REST — INTEGRAÇÕES, FUNCTIONS, AGENTS, APP
+--------------------------------------------------------------------------------
+INTEGRAÇÕES  (src/api/integrations.js — usado para uploads, IA, email/SMS):
+  Core.UploadFile({ file })              → POST /integrations/upload  (multipart)
+                                           Resposta esperada: { file_url: "https://..." }
+  Core.InvokeLLM(payload)                → POST /integrations/llm
+  Core.SendEmail(payload)                → POST /integrations/email
+  Core.SendSMS(payload)                  → POST /integrations/sms
+  Core.GenerateImage(payload)            → POST /integrations/generate-image
+  Core.ExtractDataFromUploadedFile(p)    → POST /integrations/extract-data
+  NOTA: UploadFile é o mais usado (fotos de perfil, documentos, anexos). O backend
+  deve guardar o ficheiro e devolver o URL público em { file_url }.
+
+FUNCTIONS  (src/api/functions.js — RPC estilo serverless):
+  invoke(name, payload)                  → POST /functions/{name}
+  Wrappers já existentes (integração de email):
+    gmailOAuth, syncGmail, outlookOAuth, syncOutlook
+    → POST /functions/gmailOAuth, /functions/syncGmail, etc.
+  Há páginas de callback OAuth do Gmail no frontend (GmailCallback,
+  GmailOAuthCallback) que dependem destas funções.
+
+AGENTS  (src/api/agents.js — chat com assistente "Wiwi"):
+  createConversation(payload)            → POST /agents/conversations → { id }
+  addMessage(convId, message)            → POST /agents/conversations/{id}/messages
+  subscribeToConversation(id, cb)        → hoje faz POLLING de GET /agents/conversations/{id}
+                                           a cada 3s. Trocar por SSE/WebSocket quando
+                                           o backend expuser realtime.
+
+APP  (src/api/client.js — metadados/telemetria):
+  api.app.getPublicSettings()            → GET  /app/public-settings
+                                           Resposta: { id, public_settings: {...} }
+                                           É chamada no ARRANQUE (ver AuthContext).
+  api.appLogs.logUserInApp(page)         → POST /app/logs/user-in-app  (best-effort)
+
+
+B6. MODELO DE DADOS (40 entidades)
+--------------------------------------------------------------------------------
+Os schemas de TODAS as entidades estão em:  base44/entities/*.jsonc
+Cada ficheiro descreve os campos, tipos, enums, defaults e `required`. Servem de
+especificação para as tabelas/coleções do backend. Formato JSON Schema simples.
+
+Lista das 40 entidades (nome → path REST kebab-case):
+  AgendaEvent(agenda-event), Assignment(assignment), BankAccount(bank-account),
+  BankStatement(bank-statement), CashRegister(cash-register), Client(client),
+  Document(document), Email(email), EmailAccount(email-account), Expense(expense),
+  Feedback(feedback), FinancialGoal(financial-goal), Invoice(invoice),
+  Message(message), MonthlyReview(monthly-review), NotificationLog(notification-log),
+  OnboardingData(onboarding-data), PricingPlan(pricing-plan), Product(product),
+  Project(project), ProjectActivityLog(project-activity-log), Receipt(receipt),
+  RecurringPayment(recurring-payment), Reminder(reminder), ReminderRule(reminder-rule),
+  ReminderSettings(reminder-settings), SavingsGoal(savings-goal), Service(service),
+  SupportMessage(support-message), SupportTicket(support-ticket), SyncState(sync-state),
+  Task(task), TaskActivity(task-activity),
+  TaskAssignmentNotification(task-assignment-notification),
+  TaskAttachment(task-attachment), TaskComment(task-comment), TaskSubtask(task-subtask),
+  TeamMember(team-member), User(user), Workspace(workspace),
+  WorkspaceMember(workspace-member)
+
+Entidades centrais (por onde começar):
+  - User            → conta do utilizador (perfil, plano, currency, onboarding).
+  - Workspace       → o "tenant" (empresa/pessoal). Todos os dados pertencem a um.
+  - WorkspaceMember → relação utilizador↔workspace + papel (owner/admin/member) +
+                      permissões (can_manage_tasks, can_manage_invoices, ...).
+  - Client, Task, Project, Invoice, Receipt, Service, Product, Document, Expense →
+    o núcleo do negócio, todos com campo `workspace_id`.
+
+Campos-âncora presentes na maioria das entidades:
+  - workspace_id (string)  → dono/tenant do registo (ver B7).
+  - id (string) + created_date (ISO)  → automáticos, devolvidos pelo backend.
+
+
+B7. MULTI-TENANCY (workspace_id) — LER COM ATENÇÃO
+--------------------------------------------------------------------------------
+A app é MULTI-TENANT. Um utilizador pode pertencer a vários "workspaces"
+(empresa e/ou pessoal). QUASE TODAS as entidades de negócio têm `workspace_id`.
+
+O frontend:
+  - Guarda o workspace ativo em User.current_workspace_id.
+  - Envia `workspace_id` no filtro de quase todas as leituras e no corpo das criações.
+    Ex.: api.entities.Task.filter({ workspace_id })
+         api.entities.Client.create({ workspace_id, ... })
+
+O backend DEVE:
+  - Validar que o utilizador autenticado é membro do workspace_id pedido
+    (via WorkspaceMember) e NEGAR acesso caso contrário. NÃO confiar cegamente no
+    workspace_id do cliente — usar o token para autorizar.
+  - Idealmente, aplicar isolamento por tenant no servidor (mesmo que o cliente
+    envie workspace_id, filtrar sempre pelos workspaces a que o utilizador pertence).
+  - Respeitar os papéis/permissões definidos em WorkspaceMember (owner/admin/member).
+
+Este é o ponto de segurança mais importante da API. Tratar workspace_id vindo do
+cliente como uma PREFERÊNCIA a validar, nunca como autorização.
+
+
+B8. FORMATO DE ERROS ESPERADO PELO FRONTEND  (src/api/http.js + AuthContext.jsx)
+--------------------------------------------------------------------------------
+O http.js normaliza qualquer falha num `ApiError` com { status, data, message }.
+Para respostas de erro, o backend deve devolver JSON com uma mensagem legível:
+    { "message": "texto do erro" }   (ou { "error": "..." })
+
+O frontend lê especificamente (no arranque, AuthContext):
+  - err.status  → 401/403 = sessão inválida → manda para /login.
+  - err.status === 403 && err.data.extra_data.reason  → casos especiais:
+        reason === 'auth_required'          → precisa de login
+        reason === 'user_not_registered'    → utilizador não registado nesta app
+    Ou seja, para bloquear o arranque por falta de auth, devolver:
+        HTTP 403  { "extra_data": { "reason": "auth_required" } }
+  - status 0 = rede inacessível (o wrapper trata; útil saber para debugging).
+
+Recomendação: usar códigos HTTP corretos (200/201, 400, 401, 403, 404, 409, 422,
+500) e sempre um corpo JSON com "message".
+
+
+B9. VARIÁVEIS DE AMBIENTE E COMO LIGAR O BACKEND
+--------------------------------------------------------------------------------
+Criar um ficheiro .env na raiz do projeto (wikima/) com:
+
+    # URL base da API. Se começar por '/', o Vite faz proxy em dev (sem CORS).
+    VITE_API_URL=/api
+
+    # Alvo do proxy de dev (para onde '/api' é reencaminhado). Ajustar à porta
+    # do vosso backend.
+    VITE_API_PROXY_TARGET=http://localhost:8000
+
+    # DESLIGAR o modo mock para usar o backend real (ver B10). Default é mock ON.
+    VITE_MOCK_AUTH=false
+
+Alternativa sem proxy (backend noutro host): pôr VITE_API_URL=https://api.wikima.com
+(URL absoluto). Nesse caso o backend precisa de CORS a permitir a origem do frontend.
+
+Microserviços: para apontar um recurso específico a outro serviço, adicionar uma
+entrada em `serviceBaseUrls` em src/api/config.js (sem tocar em chamadas).
+
+Depois de criar o .env, reiniciar `npm run dev`.
+
+
+B10. MODO MOCK (como está a correr HOJE e como desligar)
+--------------------------------------------------------------------------------
+Hoje a app corre com um backend FALSO (src/api/mock.js), ativado por defeito:
+  - Qualquer email/password faz login.
+  - api.auth.me() devolve um "Utilizador Demo" (role admin, onboarding feito).
+  - Todas as entidades devolvem listas vazias (o Workspace devolve 1 workspace demo).
+  - Integrações/functions/agents são no-ops.
+
+Isto existe só para navegar/validar a UI antes do backend existir. A flag é:
+    MOCK_MODE = (VITE_MOCK_AUTH === 'false') ? false : true    // default: MOCK ON
+
+PARA USAR O BACKEND REAL:
+  1. Definir VITE_MOCK_AUTH=false no .env.
+  2. Definir VITE_API_URL / VITE_API_PROXY_TARGET (B9).
+  3. Reiniciar o dev server.
+Quando o backend estiver estável, pode-se apagar src/api/mock.js e os ramos
+MOCK_MODE em client.js e resource.js para remover o mock por completo.
+
+
+B11. DECISÕES EM ABERTO (a equipa de backend decide)
+--------------------------------------------------------------------------------
+  - MECANISMO DE AUTH: hoje o frontend assume Bearer token em localStorage. Se
+    preferirem cookies httpOnly (mais seguro contra XSS), mudar APENAS
+    src/api/tokenStore.js (getToken devolve null) e, em http.js, acrescentar
+    `credentials: 'include'` no fetch. A UI não muda.
+  - CONVENÇÃO DE ROTAS: kebab-case singular por defeito (B4). Se usarem plural
+    (/clients) ou snake_case (/bank_account), ajustar `toPath` em entities.js.
+  - PAGINAÇÃO: o frontend usa `limit` mas ainda não paginação por offset/cursor.
+    Se precisarem, é fácil estender resource.js — combinar com a equipa de frontend.
+  - REALTIME (agents/mensagens): hoje é polling. Preferível SSE/WebSocket — trocar
+    subscribeToConversation em src/api/agents.js quando existir endpoint.
+  - PUBLIC SETTINGS: definir o que vai em /app/public-settings (feature flags,
+    branding, etc.). Hoje o frontend só precisa que devolva { id, public_settings }.
+
+
+B12. ORDEM DE IMPLEMENTAÇÃO SUGERIDA
+--------------------------------------------------------------------------------
+  1. GET /app/public-settings  (desbloqueia o arranque da app)
+  2. Auth: POST /auth/login, GET /auth/me, POST /auth/register  (+ token Bearer)
+  3. Workspace + WorkspaceMember  (multi-tenancy e o WorkspaceSwitcher)
+  4. Client, Task, Project  (núcleo do dia-a-dia)
+  5. Invoice, Receipt, Service, Product  (faturação/vendas)
+  6. Document + Integrations.Core.UploadFile  (ficheiros)
+  7. Expense/RecurringPayment/SavingsGoal/FinancialGoal/MonthlyReview (Finanças)
+  8. BankAccount/BankStatement/CashRegister  (tesouraria)
+  9. Messages, SupportTicket/SupportMessage, Feedback
+ 10. Reminders/Notifications, Functions (Gmail/Outlook), Agents (Wiwi)
+
+Em cada passo, validar com o frontend em VITE_MOCK_AUTH=false.
+
+
+B13. CHECKLIST DE ARRANQUE (backend)
+--------------------------------------------------------------------------------
+  [ ] Ler os schemas em base44/entities/*.jsonc (modelo de dados completo).
+  [ ] Escolher mecanismo de auth (Bearer vs cookie) — ver B11.
+  [ ] Implementar /app/public-settings + /auth/login + /auth/me.
+  [ ] Garantir que cada registo devolve `id` e `created_date`.
+  [ ] Implementar CRUD genérico por recurso (B4), incluindo filtros por query,
+      `sort` com sinal '-' para descendente, e `limit`.
+  [ ] list()/filter() devolvem sempre ARRAY (nunca null).
+  [ ] Aplicar isolamento multi-tenant por workspace_id + validação por token (B7).
+  [ ] Devolver erros com { message } e códigos HTTP corretos; 403+reason no arranque.
+  [ ] Implementar UploadFile → { file_url }.
+  [ ] Configurar CORS (se o frontend não usar o proxy de dev).
+  [ ] Testar a app com VITE_MOCK_AUTH=false apontada ao backend.
+
+--------------------------------------------------------------------------------
+ Dúvidas sobre o contrato? Está TODO no código, comentado, em src/api/*.js.
+ O ponto de entrada é src/api/client.js. Bom trabalho!
+================================================================================

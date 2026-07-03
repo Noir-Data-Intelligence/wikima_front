@@ -1,0 +1,104 @@
+{
+  "name": "Email",
+  "type": "object",
+  "properties": {
+    "account_id": {
+      "type": "string",
+      "description": "Reference to EmailAccount"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "gmail",
+        "outlook"
+      ]
+    },
+    "external_id": {
+      "type": "string",
+      "description": "Email ID from Gmail/Outlook"
+    },
+    "thread_id": {
+      "type": "string",
+      "description": "Thread ID for grouping"
+    },
+    "from_email": {
+      "type": "string"
+    },
+    "from_name": {
+      "type": "string"
+    },
+    "to_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cc_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "subject": {
+      "type": "string"
+    },
+    "body_text": {
+      "type": "string"
+    },
+    "body_html": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if sent by user"
+    },
+    "labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Gmail labels or Outlook folders"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number"
+          },
+          "mime_type": {
+            "type": "string"
+          },
+          "attachment_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "in_reply_to": {
+      "type": "string",
+      "description": "ID of email being replied to"
+    }
+  },
+  "required": [
+    "account_id",
+    "provider",
+    "external_id",
+    "from_email",
+    "subject",
+    "date"
+  ]
+}

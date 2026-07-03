@@ -1,0 +1,80 @@
+{
+  "name": "CashRegister",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this cash register belongs to"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Cash register date"
+    },
+    "opening_amount": {
+      "type": "number",
+      "description": "Opening cash amount"
+    },
+    "closing_amount": {
+      "type": "number",
+      "description": "Closing cash amount"
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "AOA",
+        "EUR",
+        "USD",
+        "BRL",
+        "GBP"
+      ],
+      "default": "EUR",
+      "description": "Currency code"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "closed"
+      ],
+      "default": "open",
+      "description": "Cash register status"
+    },
+    "opening_notes": {
+      "type": "string",
+      "description": "Notes when opening"
+    },
+    "closing_notes": {
+      "type": "string",
+      "description": "Notes when closing"
+    },
+    "opened_by": {
+      "type": "string",
+      "description": "User who opened"
+    },
+    "closed_by": {
+      "type": "string",
+      "description": "User who closed"
+    },
+    "opened_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Opening timestamp"
+    },
+    "closed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Closing timestamp"
+    },
+    "difference": {
+      "type": "number",
+      "description": "Calculated difference (closing - opening)"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "date",
+    "opening_amount",
+    "currency"
+  ]
+}

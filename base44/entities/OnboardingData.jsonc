@@ -1,0 +1,38 @@
+{
+  "name": "OnboardingData",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Reference to the Workspace"
+    },
+    "user_type": {
+      "type": "string",
+      "description": "individual, freelancer, company, association"
+    },
+    "business_size": {
+      "type": "string",
+      "description": "micro, small, medium"
+    },
+    "main_goals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Selected goals: tasks, clients, documents, invoicing, team"
+    },
+    "recommended_plan": {
+      "type": "string",
+      "description": "Plan recommended based on answers"
+    },
+    "selected_plan": {
+      "type": "string",
+      "description": "Plan the user selected"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}

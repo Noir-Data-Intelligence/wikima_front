@@ -1,0 +1,51 @@
+{
+  "name": "TaskSubtask",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this subtask belongs to"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Reference to parent Task"
+    },
+    "title": {
+      "type": "string",
+      "description": "Subtask title"
+    },
+    "is_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether subtask is completed"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When subtask was completed"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Display order"
+    },
+    "created_by_id": {
+      "type": "string",
+      "description": "User who created subtask"
+    },
+    "created_by_name": {
+      "type": "string",
+      "description": "Name of user who created subtask"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When subtask was created"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "task_id",
+    "title"
+  ]
+}

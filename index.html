@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Theme no-flash: apply the stored/default (dark) theme before first paint -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme') || 'dark';
+          var dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) { document.documentElement.classList.add('dark'); }
+      })();
+    </script>
+
+    <!-- Canonical domain — tells search engines the authoritative URL -->
+    <link rel="canonical" href="https://wikima.app/" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/wikima-logo.png" />
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Primary SEO -->
+    <title>WiKima — Gestão administrativa simplificada</title>
+    <meta name="description" content="WiKima reúne as suas tarefas, clientes, documentos e finanças num sistema claro e organizado. Comece gratuitamente." />
+    <meta name="keywords" content="gestão administrativa, tarefas, clientes, documentos, faturas, finanças, produtividade" />
+    <meta name="author" content="WiKima" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp…) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="WiKima" />
+    <meta property="og:title" content="WiKima — Gestão administrativa simplificada" />
+    <meta property="og:description" content="WiKima reúne as suas tarefas, clientes, documentos e finanças num sistema claro e organizado. Comece gratuitamente." />
+    <meta property="og:url" content="https://wikima.app/" />
+    <meta property="og:image" content="/wikima-logo.png" />
+    <meta property="og:image:alt" content="WiKima logo" />
+    <meta property="og:locale" content="pt_PT" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WiKima — Gestão administrativa simplificada" />
+    <meta name="twitter:description" content="WiKima reúne as suas tarefas, clientes, documentos e finanças num sistema claro e organizado." />
+    <meta name="twitter:image" content="/wikima-logo.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

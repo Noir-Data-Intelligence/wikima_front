@@ -1,0 +1,51 @@
+{
+  "name": "ProjectActivityLog",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Reference to the Project"
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this log belongs to"
+    },
+    "action_type": {
+      "type": "string",
+      "description": "Type of action, e.g. project_created, task_created, member_added, etc."
+    },
+    "action_label_pt": {
+      "type": "string",
+      "description": "Human-readable action in Portuguese"
+    },
+    "action_label_en": {
+      "type": "string",
+      "description": "Human-readable action in English"
+    },
+    "item_name": {
+      "type": "string",
+      "description": "Name of the related item (task title, member name, doc name, etc.)"
+    },
+    "actor_name": {
+      "type": "string",
+      "description": "Name of the user who performed the action"
+    },
+    "actor_email": {
+      "type": "string",
+      "description": "Email of the user who performed the action"
+    },
+    "color": {
+      "type": "string",
+      "description": "Tailwind color token for the icon dot, e.g. bg-blue-400"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Icon name hint for display"
+    }
+  },
+  "required": [
+    "project_id",
+    "workspace_id",
+    "action_type"
+  ]
+}

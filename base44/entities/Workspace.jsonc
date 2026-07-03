@@ -1,0 +1,101 @@
+{
+  "name": "Workspace",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Workspace name"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "personal",
+        "company"
+      ],
+      "default": "personal",
+      "description": "Workspace type"
+    },
+    "owner_email": {
+      "type": "string",
+      "description": "Email of workspace owner"
+    },
+    "business_tier": {
+      "type": "string",
+      "enum": [
+        "one",
+        "corporate"
+      ],
+      "default": "one",
+      "description": "WiKima One or WiKima Corporate tier"
+    },
+    "company_info": {
+      "type": "object",
+      "properties": {
+        "company_name": {
+          "type": "string"
+        },
+        "entity_type": {
+          "type": "string"
+        },
+        "business_area": {
+          "type": "string"
+        },
+        "tax_number": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "description": "Company details (for company workspaces)"
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string",
+          "default": "EUR"
+        },
+        "timezone": {
+          "type": "string",
+          "default": "Europe/Lisbon"
+        },
+        "language": {
+          "type": "string",
+          "default": "pt"
+        }
+      },
+      "description": "Workspace settings"
+    },
+    "plan": {
+      "type": "string",
+      "enum": [
+        "free",
+        "starter",
+        "growth",
+        "business"
+      ],
+      "default": "business",
+      "description": "Subscription plan for this workspace"
+    },
+    "member_count": {
+      "type": "number",
+      "default": 1,
+      "description": "Number of active members"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended",
+        "archived"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "owner_email"
+  ]
+}

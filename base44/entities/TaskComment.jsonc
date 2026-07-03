@@ -1,0 +1,47 @@
+{
+  "name": "TaskComment",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this comment belongs to"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Reference to Task"
+    },
+    "content": {
+      "type": "string",
+      "description": "Comment text"
+    },
+    "author_id": {
+      "type": "string",
+      "description": "User ID who wrote comment"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Name of comment author"
+    },
+    "author_email": {
+      "type": "string",
+      "description": "Email of comment author"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When comment was created"
+    },
+    "updated_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When comment was last updated"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "task_id",
+    "content",
+    "author_id",
+    "author_name"
+  ]
+}

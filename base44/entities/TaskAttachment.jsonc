@@ -1,0 +1,49 @@
+{
+  "name": "TaskAttachment",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this attachment belongs to"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Reference to Task"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Original file name"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL to the uploaded file"
+    },
+    "file_type": {
+      "type": "string",
+      "description": "File type/extension (pdf, doc, docx, xls, xlsx, jpg, png, etc)"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "File size in bytes"
+    },
+    "uploaded_by_id": {
+      "type": "string",
+      "description": "User ID who uploaded the file"
+    },
+    "uploaded_by_name": {
+      "type": "string",
+      "description": "Name of user who uploaded the file"
+    },
+    "uploaded_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When file was uploaded"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "task_id",
+    "file_name",
+    "file_url"
+  ]
+}

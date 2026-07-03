@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Canonical domain
+Host: https://wikima.app
+
+# Sitemap location
+Sitemap: https://wikima.app/sitemap.xml

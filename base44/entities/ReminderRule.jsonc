@@ -1,0 +1,144 @@
+{
+  "name": "ReminderRule",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Rule name/description"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "invoice_due_soon",
+        "invoice_overdue",
+        "payment_not_received",
+        "recurring_payment_due",
+        "client_outstanding_balance",
+        "client_no_contact",
+        "email_unanswered",
+        "message_pending_response",
+        "task_due_24h",
+        "task_due_2h",
+        "task_due_today",
+        "task_overdue",
+        "document_pending",
+        "document_expiring",
+        "daily_summary",
+        "weekly_summary"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "invoice",
+        "client",
+        "email",
+        "task",
+        "document",
+        "summary"
+      ]
+    },
+    "trigger_condition": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "equals",
+            "greater_than",
+            "less_than",
+            "contains",
+            "not_equals"
+          ]
+        },
+        "value": {
+          "type": "string"
+        },
+        "days_offset": {
+          "type": "number"
+        }
+      },
+      "description": "Condition that triggers this rule"
+    },
+    "schedule": {
+      "type": "object",
+      "properties": {
+        "frequency": {
+          "type": "string",
+          "enum": [
+            "once",
+            "daily",
+            "weekly",
+            "on_condition"
+          ]
+        },
+        "time": {
+          "type": "string"
+        },
+        "day_of_week": {
+          "type": "number"
+        }
+      }
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "urgent"
+      ],
+      "default": "medium"
+    },
+    "title_template": {
+      "type": "string",
+      "description": "Template for reminder title"
+    },
+    "body_template": {
+      "type": "string",
+      "description": "Template for reminder body"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "required_plan": {
+      "type": "string",
+      "enum": [
+        "free",
+        "starter",
+        "growth",
+        "business"
+      ],
+      "default": "free"
+    },
+    "channels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "email",
+        "in_app"
+      ]
+    },
+    "respect_working_hours": {
+      "type": "boolean",
+      "default": true
+    },
+    "max_per_day": {
+      "type": "number",
+      "default": 3
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "category",
+    "title_template",
+    "body_template"
+  ]
+}

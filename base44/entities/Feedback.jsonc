@@ -1,0 +1,68 @@
+{
+  "name": "Feedback",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this feedback belongs to"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User who submitted feedback"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "User email"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "User full name"
+    },
+    "user_profile": {
+      "type": "string",
+      "enum": [
+        "personal",
+        "professional",
+        "company"
+      ],
+      "description": "User profile type"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "bug",
+        "feature",
+        "general",
+        "improvement"
+      ],
+      "description": "Feedback category"
+    },
+    "rating": {
+      "type": "number",
+      "description": "Star rating 1-5"
+    },
+    "message": {
+      "type": "string",
+      "description": "Feedback message"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "reviewed",
+        "in_progress",
+        "done"
+      ],
+      "default": "new",
+      "description": "Admin review status"
+    },
+    "admin_notes": {
+      "type": "string",
+      "description": "Internal admin notes"
+    }
+  },
+  "required": [
+    "category",
+    "message"
+  ]
+}

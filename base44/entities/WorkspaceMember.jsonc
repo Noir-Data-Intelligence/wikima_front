@@ -1,0 +1,72 @@
+{
+  "name": "WorkspaceMember",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Reference to Workspace"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Member email"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "owner",
+        "admin",
+        "member"
+      ],
+      "default": "member",
+      "description": "Role in workspace"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "can_manage_tasks": {
+          "type": "boolean",
+          "default": true
+        },
+        "can_manage_clients": {
+          "type": "boolean",
+          "default": true
+        },
+        "can_manage_documents": {
+          "type": "boolean",
+          "default": true
+        },
+        "can_manage_invoices": {
+          "type": "boolean",
+          "default": true
+        },
+        "can_view_financials": {
+          "type": "boolean",
+          "default": true
+        },
+        "can_manage_members": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "description": "Member permissions"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "invited",
+        "suspended"
+      ],
+      "default": "active"
+    },
+    "joined_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "user_email",
+    "role"
+  ]
+}

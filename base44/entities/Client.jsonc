@@ -1,0 +1,161 @@
+{
+  "name": "Client",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this client belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Client full name or company name"
+    },
+    "first_name": {
+      "type": "string",
+      "description": "First name (individual)"
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Last name (individual)"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "company"
+      ],
+      "default": "individual"
+    },
+    "company": {
+      "type": "string",
+      "description": "Company name"
+    },
+    "main_contact_name": {
+      "type": "string",
+      "description": "Main contact person (for company type)"
+    },
+    "job_title": {
+      "type": "string",
+      "description": "Job title or position"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "whatsapp": {
+      "type": "string",
+      "description": "WhatsApp number"
+    },
+    "website": {
+      "type": "string",
+      "description": "Website URL"
+    },
+    "tax_number": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "postal_code": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string",
+      "description": "Client's country"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "default": "active"
+    },
+    "pipeline_stage": {
+      "type": "string",
+      "enum": [
+        "lead",
+        "contacted",
+        "proposal_sent",
+        "negotiation",
+        "won",
+        "lost"
+      ],
+      "default": "lead",
+      "description": "CRM pipeline stage"
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "client",
+        "lead",
+        "supplier",
+        "partner"
+      ],
+      "default": "client",
+      "description": "Nature of the relationship"
+    },
+    "customer_since": {
+      "type": "string",
+      "format": "date",
+      "description": "Date client relationship started"
+    },
+    "last_interaction_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "next_action_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "service_category": {
+      "type": "string",
+      "description": "Industry / sector"
+    },
+    "total_paid": {
+      "type": "number",
+      "default": 0
+    },
+    "total_outstanding": {
+      "type": "number",
+      "default": 0
+    },
+    "assigned_to_name": {
+      "type": "string"
+    },
+    "lead_source": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string"
+    },
+    "employee_count": {
+      "type": "string"
+    },
+    "salutation": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "name"
+  ]
+}

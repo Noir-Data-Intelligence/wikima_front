@@ -1,0 +1,86 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "country": {
+      "type": "string",
+      "description": "User's country"
+    },
+    "preferred_currency": {
+      "type": "string",
+      "enum": [
+        "AOA",
+        "EUR",
+        "USD",
+        "BRL",
+        "GBP"
+      ],
+      "default": "AOA",
+      "description": "User's preferred currency"
+    },
+    "subscription_plan": {
+      "type": "string",
+      "enum": [
+        "free",
+        "starter",
+        "growth",
+        "business"
+      ],
+      "default": "free"
+    },
+    "billing_period": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "annual"
+      ],
+      "default": "monthly"
+    },
+    "subscription_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "cancelled",
+        "expired"
+      ],
+      "default": "active"
+    },
+    "subscription_start_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "subscription_end_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "trial_start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the 30-day free trial started"
+    },
+    "trial_end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the 30-day free trial ends"
+    },
+    "is_trial_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user is currently in a free trial"
+    },
+    "user_profile": {
+      "type": "string",
+      "enum": [
+        "personal",
+        "professional",
+        "company"
+      ],
+      "description": "Selected profile during onboarding: personal finance, independent professional, or company/organization"
+    },
+    "activity_type": {
+      "type": "string",
+      "description": "For professional profile: consultant, coach, therapist, trainer, virtual_assistant, freelancer, small_business, other"
+    }
+  },
+  "required": []
+}

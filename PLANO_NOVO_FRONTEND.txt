@@ -1,0 +1,586 @@
+================================================================================
+WIKIMA — PLANO DE DESENVOLVIMENTO DO NOVO FRONTEND
+"Your business, simplified."
+================================================================================
+Documento: plano técnico e de design (apenas planeamento — nada implementado)
+Data: 2026-07-01
+Âmbito: redesenho completo do frontend React da app WiKima, reaproveitando a
+        camada de API própria (src/api/) já criada na migração do Base44.
+Estado do backend: ainda não existe (microserviços REST a construir depois).
+
+--------------------------------------------------------------------------------
+DECISÕES FECHADAS (orientação do cliente — 2026-07-01)
+--------------------------------------------------------------------------------
+  ✔ Tema padrão: ESCURO (preto) por defeito, com toggle claro/sistema disponível.
+  ✔ Cor primária: LARANJA #E88134 (CTAs/ações — salta no escuro); navy #1A206A
+    como base de superfície/fundo.
+  ✔ Tipografia: SORA (títulos/display — geométrica, combina com o wordmark redondo)
+    + INTER (corpo/UI). Ambas Google Fonts, self-hosted.
+  ✔ i18n: migrar para REACT-I18NEXT (Opção A — namespaces por domínio).
+  ✔ Abordagem: redesenho IN-PLACE no mesmo repositório (reaproveita src/api/ e hooks).
+  ✔ URLs: modernizar para REST (/clients/:id em vez de /ClientProfile?id=).
+  ✔ Landing vs Home: consolidar (Home absorvida pela Landing).
+  ✔ Densidade: app = produtivo mas arejado; marketing/auth = espaçoso/premium.
+  (Detalhe de cada decisão nas secções 3, 5, 6, 7 e 9.)
+
+--------------------------------------------------------------------------------
+0. COMO LER ESTE DOCUMENTO
+--------------------------------------------------------------------------------
+- Secções 1–3: contexto, identidade visual e design system (o "porquê" e o "look").
+- Secções 4–8: arquitetura técnica (stack, pastas, tema, i18n, componentes).
+- Secção 9: inventário das 46 páginas e como cada uma é redesenhada.
+- Secções 10–13: padrões de UI, uso dos assets da marca, migração faseada e roadmap.
+- Secção 14: decisões pendentes que preciso que orientes antes de começar.
+
+================================================================================
+1. OBJETIVO & PRINCÍPIOS
+================================================================================
+Objetivo: reconstruir a interface da WiKima com um layout mais LIMPO, MODERNO e
+INTUITIVO, 100% alinhado com a identidade visual da marca (pasta "WIKIMA Branding"),
+com suporte a tema claro/escuro e tradução PT/EN, sobre uma base técnica moderna
+e consistente.
+
+Princípios de design:
+  1. Marca primeiro — laranja WiKima como acento, navy/preto como base, ondas
+     como motivo-assinatura. Nada de cores aleatórias.
+  2. Consistência via tokens — zero cores hardcoded; tudo por variáveis de tema.
+  3. Clareza > densidade — respiração, hierarquia tipográfica, menos ruído visual.
+  4. Componível — design system de componentes reutilizáveis (shadcn/ui como base).
+  5. Acessível — contraste AA, foco visível, navegação por teclado, aria.
+  6. Rápido e fluido — micro-interações subtis (Framer Motion), skeletons, sem jank.
+  7. Responsivo e mobile-first — a app já é PWA; manter e melhorar.
+
+O que ESTE plano NÃO muda:
+  - A camada de dados src/api/ (client REST) e os hooks TanStack Query — reaproveitados.
+  - O modelo de domínio (entidades, perfis personal/professional/company).
+  - A lógica de negócio existente (será re-ligada aos novos componentes).
+
+================================================================================
+2. ANÁLISE DO ESTADO ATUAL (baseline)
+================================================================================
+Dimensão do frontend:
+  - ~45.780 linhas em src/ (JSX/JS).
+  - 46 páginas (40 top-level + 6 admin).
+  - 49 componentes shadcn/ui já instalados em src/components/ui/ (base pronta).
+  - ~30+ componentes de domínio por pasta (dashboard, clients, tasks, finance…).
+
+Dívida técnica de estilo (razão principal do redesign):
+  - 408 blocos de style={{ }} inline.
+  - 1.338 cores hexadecimais hardcoded (dominantes: #0F172A, #334155, #1C2D5F,
+    #E97C3F, #1E293B, #B8C0D4). Palete slate/navy + laranja, próxima mas NÃO igual
+    à marca oficial (#1A206A / #E88134).
+  - Tokens shadcn (--background, --primary…) existem mas com valores genéricos
+    (preto/branco) e são ignorados pelo código.
+
+Tema:
+  - next-themes está instalado mas praticamente não é usado (apenas 2 utilitários
+    "dark:" em toda a app). NÃO existe dark/light real — a app é hardcoded escura.
+  => O sistema de tema tem de ser construído de raiz.
+
+i18n:
+  - src/components/LanguageContext.jsx: dicionário plano num único ficheiro,
+    ~188 chaves PT + bloco EN, função t(key), persistência em localStorage,
+    deteção de idioma do browser. Consumido por 75 componentes.
+  - MAS muito texto continua hardcoded diretamente nos componentes (188 chaves são
+    poucas para 46 páginas). Cobertura de tradução incompleta.
+
+Navegação / arquitetura atual (a preservar em termos de IA):
+  - Layout.jsx envolve tudo em providers (Language, DemoMode, Tier, Workspace,
+    UserType) — MAS "cada página renderiza a sua própria sidebar" (DashboardSidebar
+    repetida por página). Não há casca (shell) partilhada. => corrigir no novo front.
+  - Routing em App.jsx + pages.config.js (auto-registo de páginas).
+  - Perfis de utilizador: 'personal' | 'professional' | 'company' controlam que
+    módulos aparecem no menu. Existe também secção "WiKima Admin" (role === 'admin').
+
+Bibliotecas (uso atual):
+  - Já usadas: @tanstack/react-query (38), recharts (4), sonner (33), date-fns (25),
+    lucide-react (ícones), react-router-dom v6.
+  - Presentes mas SUButilizadas: framer-motion (0 usos), zod (0), react-hook-form (1),
+    shadcn ui/table (0 usos).
+  - Em falta (a adicionar): @tanstack/react-table.
+
+Resíduos a remover:
+  - src/lib/VisualEditAgent.jsx — bridge do editor visual do Base44 (postMessage
+    para janela-pai). Sem função na app standalone. Remover e tirar do App.jsx.
+  - Referências/estilos a "widgets" e o conceito de iframe-sandbox.
+
+Assets locais já presentes em public/: wikima-logo.png, auth-image-1.png,
+onboarding-image.png (migrados do CDN do Base44).
+
+================================================================================
+3. IDENTIDADE VISUAL & DESIGN SYSTEM
+================================================================================
+Fonte da verdade: pasta "WIKIMA Branding" (fora da pasta wikima), com:
+  1. LOGOTIPO/  → HORIZONTAL e VERTICAL (JPG/PNG/SVG/EPS/PDF), 4 variantes cada.
+  2. LETTERING/ → wordmark "Wikima" isolado.
+  3. ICONE/     → marca "W" ondulada isolada (ideal p/ favicon, sidebar recolhida, loaders).
+  BACKGROUND _ WIKIMA LOGO-13/14/15.jpg → fundos com ondas laranja sobre preto.
+
+3.1 PALETA DE CORES DA MARCA (extraída dos SVG oficiais)
+  - Navy / Índigo profundo .... #1A206A   (primária de marca)
+  - Laranja WiKima ............ #E88134   (acento / call-to-action / marca "W")
+  - Azul-acinzentado (slate) .. #A5B0C2   (secundária / muted / texto suave)
+  - Quase-branco .............. #FCFFFF   (base clara)
+  - Preto textura fundo ....... ~#0B0B0D  (base escura dos backgrounds oficiais)
+
+  Escalas a gerar (50→950) para: brand-navy, brand-orange, neutral (slate).
+  Semânticos (mapear a tokens): success, warning, danger, info.
+
+3.2 TOKENS DE TEMA (CSS variables — HSL — light + dark)
+  DECISÃO: primária = LARANJA #E88134 nos DOIS temas (é a cor de ação da marca e
+  salta no escuro); navy #1A206A é a base de superfície. Tema ESCURO é o padrão.
+  Reescrever src/index.css com dois conjuntos coerentes com a marca:
+
+  TEMA ESCURO (.dark) — PADRÃO
+    --background: preto-navy (#0B0B12 / #12132A)   --foreground: #FCFFFF
+    --card: navy elevado (#171A38)                 --muted: navy 20% / slate
+    --primary: laranja #E88134                     --primary-foreground: #0B0B12 (preto)
+    --secondary: navy #1A206A                       --secondary-foreground: #FCFFFF
+    --accent: laranja #E88134                       --accent-foreground: #0B0B12
+    --border/input: navy claro (slate 15%)          --ring: laranja
+    --sidebar-*: navy profundo com texto claro; item ativo = laranja
+
+  TEMA CLARO (:root)
+    --background: quase-branco (#FCFFFF)           --foreground: navy #1A206A
+    --card: branco puro                            --muted: slate 10%
+    --primary: laranja #E88134                     --primary-foreground: branco
+    --secondary: navy #1A206A                       --secondary-foreground: branco
+    --accent: laranja #E88134                       --accent-foreground: branco
+    --border/input: slate claro                     --ring: laranja
+    --sidebar-*: superfície clara com navy texto; item ativo = laranja
+
+    Charts (--chart-1..5): derivados de laranja + navy + slate + 2 análogas,
+    consistentes nos dois temas.
+
+3.3 TIPOGRAFIA (DECIDIDA)
+  - Display/títulos: SORA — geométrica e arredondada, combina com o wordmark do logo.
+  - Corpo/UI: INTER — legível, neutra, excelente para dashboards e tabelas.
+  - Ambas Google Fonts, SELF-HOSTED (@fontsource) para performance e privacidade.
+  - Tokens: font-display (Sora) para h1–h3 e números de KPI; font-sans (Inter) para
+    corpo, labels, tabelas. Escala tipográfica e pesos definidos como tokens.
+
+3.4 ELEMENTOS VISUAIS DE MARCA (reutilizar as imagens)
+  - Marca "W" ondulada (ICONE SVG) → favicon, logo da sidebar recolhida, spinner/
+    loader animado (a onda desenha-se), watermark subtil em cards vazios.
+  - Ondas laranja (BACKGROUND-13/14/15) → hero da Landing, fundo das páginas de
+    auth (Login/Register/Onboarding), cabeçalhos de secção, estados vazios.
+  - Logo horizontal → sidebar expandida e navbar pública.
+  - Logo vertical → splash / ecrãs de auth centrados.
+  - Copiar os assets escolhidos (SVG preferencial) para src/assets/brand/ e public/.
+
+3.5 FORMA & ELEVAÇÃO
+  - Raio: --radius base 0.75rem (cantos suaves, alinhado com o wordmark redondo).
+  - Sombras: escala suave; no escuro usar glow subtil laranja em elementos ativos.
+  - Motivo de "onda" como divisórias/headers (SVG inline reaproveitando o ícone).
+
+================================================================================
+4. STACK TÉCNICA
+================================================================================
+Manter:
+  - React 18 + Vite 6 + React Router v6.
+  - Tailwind CSS 3 + shadcn/ui (Radix) — base do design system.
+  - @tanstack/react-query (dados) + camada src/api/ (REST próprio).
+  - Recharts (gráficos), sonner (toasts), date-fns, lucide-react (ícones).
+
+Adotar a sério (já são deps, passar a usar):
+  - Framer Motion — transições de página, entrada de listas/cards, micro-interações.
+  - React Hook Form + Zod — TODOS os formulários (schema + validação tipada).
+
+Adicionar:
+  - @tanstack/react-table — todas as tabelas de dados (sorting, filtros, paginação,
+    seleção, colunas visíveis) integrada com shadcn ui/table.
+  - next-themes — provider de tema claro/escuro (padrão escuro; toggle e persistência).
+  - i18next + react-i18next + i18next-browser-languagedetector — i18n PT/EN (DECIDIDO).
+  - @fontsource/sora + @fontsource/inter — fontes self-hosted (DECIDIDO).
+  - (opcional) cmdk já presente → paleta de comandos (Ctrl/Cmd+K) para navegação.
+
+Remover:
+  - @base44/* (já removido). VisualEditAgent e resíduos de sandbox.
+  - Dependências mortas após redesign (react-quill/leaflet/jspdf se não usadas —
+    auditar no fim).
+
+================================================================================
+5. ARQUITETURA DO NOVO FRONTEND
+================================================================================
+Estratégia: redesenho IN-PLACE no mesmo repositório, reaproveitando src/api/ e os
+hooks de dados. Introduzir uma camada de design system e uma casca (shell) partilhada,
+depois migrar página a página. Assim a app nunca "parte" durante a transição.
+
+5.1 ESTRUTURA DE PASTAS (proposta)
+  src/
+    api/                     (mantido — REST client)
+    app/
+      providers.jsx          (composição de todos os providers: Query, Theme, i18n,
+                              Auth, Workspace, UserType, Tier, DemoMode, Tooltip)
+      router.jsx             (rotas declarativas, lazy-loading por página)
+    assets/brand/            (logos SVG, ícone, ondas)
+    components/
+      ui/                    (shadcn base — mantido/afinado)
+      brand/                 (Logo, WaveMark, WaveBackground, BrandSpinner)
+      layout/                (AppShell, Sidebar, Topbar, MobileNav, PageHeader,
+                              ThemeToggle, LanguageSwitcher, UserMenu, WorkspaceSwitcher)
+      data/                  (DataTable [TanStack], EmptyState, StatCard, ChartCard,
+                              FilterBar, Pagination, ConfirmDialog)
+      forms/                 (FormField wrappers RHF, FileUpload, DatePicker, MoneyInput)
+    features/                (lógica por domínio: tasks, clients, invoices, …)
+    pages/                   (as páginas — reescritas, uma a uma)
+    lib/                     (utils, query-client, i18n config, theme)
+    styles/                  (index.css com tokens)
+  Nota: a estrutura exata pode ser ajustada; o objetivo é separar UI base (ui/brand),
+  casca (layout), primitivos de dados (data/forms) e domínio (features/pages).
+
+5.2 CASCA (APP SHELL) — o maior ganho de UX
+  Criar UM shell partilhado (não repetido por página):
+    <AppShell>
+      <Sidebar/>            (navegação por grupos e perfis; recolhível; ícone-only)
+      <Topbar/>             (busca/command, WorkspaceSwitcher, ThemeToggle,
+                            LanguageSwitcher, notificações, UserMenu)
+      <main>
+        <PageHeader/>       (título, breadcrumb, ações primárias — padronizado)
+        <Outlet/>           (conteúdo da página)
+      </main>
+    </AppShell>
+  - Sidebar deriva do menu já existente (grupos: Workspace, Clientes & Equipa,
+    Trabalho, Finanças, Administração + secção WiKima Admin) e respeita os perfis
+    personal/professional/company. Recolhível (expand/collapse) com ícone "W".
+  - Layout público (marketing/auth) separado: <PublicLayout> com navbar + footer.
+
+5.3 ROUTING (URLs REST — DECIDIDO)
+  - Migrar para rotas com lazy() + Suspense (code-splitting por página → bundle
+    atual de 2.1MB cai drasticamente).
+  - Grupos de rota: público, auth, app (protegido), admin (protegido + role).
+  - Guards reutilizados/limpos: ProtectedRoute (auth + onboarding), AdminRoute (role).
+  - URLs modernizadas para REST/kebab-case, com parâmetros de rota em vez de query:
+      /ClientProfile?id=X      -> /clients/:id
+      /ProjectProfile?id=X     -> /projects/:id
+      /TaskDetail?id=X         -> /tasks/:id
+      /TeamMemberProfile?id=X  -> /team/:id
+      /Invoices, /Tasks, ...   -> /invoices, /tasks, ... (minúsculas)
+      Admin                    -> /admin/users, /admin/subscriptions, /admin/audit-logs, ...
+  - Manter redirects das rotas antigas → novas para não partir links/bookmarks.
+  - Auditar e atualizar todos os createPageUrl()/Link internos para as novas rotas.
+
+================================================================================
+6. TEMA CLARO / ESCURO  (padrão = ESCURO)
+================================================================================
+  - Provider next-themes (attribute="class", defaultTheme="dark", enableSystem=true).
+    Padrão escuro; utilizador pode escolher claro ou "sistema" no ThemeToggle.
+  - Tokens definidos em :root (claro) e .dark (escuro) — secção 3.2.
+  - Componente <ThemeToggle> na Topbar (claro / escuro / sistema), persistido.
+  - Refactor de TODAS as cores hardcoded (1.338) e styles inline (408) para classes
+    Tailwind baseadas em tokens (bg-background, text-foreground, bg-card, text-accent…).
+  - Recharts: ler cores dos tokens (via CSS vars) para os gráficos seguirem o tema.
+  - Garantir contraste AA nos dois temas (laranja sobre navy e sobre branco).
+  - Imagens/ondas: versão para claro (navy sobre branco) e escuro (laranja sobre preto).
+
+================================================================================
+7. INTERNACIONALIZAÇÃO (PT / EN)
+================================================================================
+Objetivo: PT e EN completos, com troca instantânea e deteção inicial por browser.
+
+DECISÃO: migrar para REACT-I18NEXT.
+  - Namespaces por domínio (common, nav, dashboard, tasks, clients, finance, auth…)
+    em src/lib/i18n/{pt,en}/*.json. Escala melhor que um ficheiro único.
+  - Interpolação, plurais, datas/moeda por locale (Intl + date-fns/locale).
+  - Deteção por browser + persistência em localStorage (LanguageDetector).
+  - Migrar as ~188 chaves existentes do LanguageContext e EXTRAIR o texto ainda
+    hardcoded (auditoria página a página) para as chaves.
+  - Manter um hook useTranslation() e um wrapper de compatibilidade para as 75
+    ocorrências de useLanguage() durante a migração, depois removê-lo.
+  Regra: nada de texto hardcoded no novo front.
+
+Extras i18n:
+  - Formatação de moeda por país (já existe CountryCurrencySelector) via Intl.NumberFormat.
+  - Datas via date-fns com locale pt/en.
+  - LanguageSwitcher na Topbar e nas páginas públicas.
+
+================================================================================
+8. DESIGN SYSTEM — COMPONENTES BASE (a construir/afinar primeiro)
+================================================================================
+Camada 1 (primitivos, shadcn afinados à marca): Button, Input, Select, Textarea,
+  Checkbox, Switch, Radio, Tabs, Dialog, Sheet, Popover, Dropdown, Tooltip, Badge,
+  Card, Avatar, Skeleton, Progress, Toast(sonner), Command.
+Camada 2 (marca): Logo, WaveMark (ícone), WaveBackground (ondas), BrandSpinner.
+Camada 3 (compostos de app):
+  - AppShell, Sidebar (grupos+perfis), Topbar, PageHeader, WorkspaceSwitcher,
+    ThemeToggle, LanguageSwitcher, UserMenu.
+  - StatCard (KPI com trend), ChartCard (wrapper Recharts + tokens).
+  - DataTable (TanStack Table: colunas, sort, filtro, paginação, seleção, densidade,
+    export CSV, estado vazio, loading skeleton).
+  - FilterBar, EmptyState, ConfirmDialog, PageSection.
+  - Form kit (RHF+Zod): Form, FormField, FormInput, FormSelect, FormDatePicker,
+    FormMoneyInput, FileUpload (usa api.integrations.Core.UploadFile).
+Micro-interações (Framer Motion): fade/slide de página, stagger de listas/cards,
+  hover/press em botões e itens de menu, animação da onda no loader.
+
+================================================================================
+9. INVENTÁRIO DE PÁGINAS (46) & REDESIGN
+================================================================================
+Legenda: [Público] [Auth] [App] [Admin]. Cada página herda o design system e o
+shell adequado. Descrição = função + foco do redesign.
+
+— PÚBLICAS / MARKETING —
+  Landing   [Público] Hero com ondas laranja, proposta de valor, CTA. Redesign de
+            impacto, i18n, claro/escuro, animações de entrada. Rota: "/".
+  Home      [Público] CONSOLIDADA na Landing (Home deixa de existir; "/home" → redirect "/").
+  About     [Público] Sobre a WiKima. Layout editorial limpo.
+  Features  [Público] Funcionalidades. Grid de cards com ícones e ondas.
+  Plans     [Público] Planos/preços. Tabela comparativa clara + destaque de plano.
+
+— AUTENTICAÇÃO / ONBOARDING —
+  Login              [Auth] Split-screen: form (RHF+Zod) + arte de ondas. OAuth Google/MS.
+  Register           [Auth] Registo multi-passo, validação, imagem de marca.
+  ForgotPassword     [Auth] Pedido de reposição (email/OTP).
+  ResetPassword      [Auth] Nova password com token.
+  AcceptInvite       [Auth] Aceitar convite para workspace.
+  Onboarding         [Auth] Wizard de perfil (personal/professional/company) e módulos.
+                     Redesign como stepper animado, com fundo de marca.
+  GmailCallback /    [Auth] Callbacks OAuth (Gmail/Outlook). Ecrã de estado simples.
+  GmailOAuthCallback
+
+— NÚCLEO DA APP —
+  Dashboard  [App] "Hoje/Today": KPIs (tarefas urgentes, mensagens, faturas pendentes),
+             agenda do dia, ações rápidas, assistente WIWI. Redesign com StatCards,
+             ChartCard e layout em grelha responsiva.
+
+— CLIENTES & EQUIPA —
+  Clients          [App] Lista/pipeline de clientes → DataTable + vista pipeline (kanban).
+  ClientProfile    [App] Perfil do cliente (dados, histórico, faturas, tarefas) em tabs.
+  Team             [App] Membros da equipa → DataTable + cartões.
+  TeamMemberProfile[App] Perfil de membro (permissões, atividade).
+  Projects         [App] Projetos → grelha/kanban.
+  ProjectProfile   [App] Detalhe do projeto (tarefas, atividade, ficheiros) em tabs.
+  Messages         [App] Mensagens/inbox → layout de duas colunas (lista + conversa).
+
+— TRABALHO —
+  Tasks       [App] Gestão de tarefas → vistas Lista/Kanban/Calendário; filtros; DataTable.
+  TaskDetail  [App] Detalhe de tarefa (subtarefas, comentários, anexos, atividade).
+  Assignments [App] Atribuições/afetações → DataTable + formulário RHF.
+  Agenda      [App] Calendário de eventos → vista mensal/semana; diálogo de evento.
+  Services    [App] Catálogo de serviços → DataTable + form.
+  Documents   [App] Gestão documental → grelha/lista, upload, categorias, pré-visualização.
+  Stock       [App] Inventário (perfil company) → DataTable de produtos + movimentos.
+
+— FINANÇAS —
+  Invoices          [App] Faturas → DataTable, estados, criação (form), PDF.
+  Receipts          [App] Recibos → DataTable + diálogo.
+  CashRegister      [App] Controlo de caixa → abertura/fecho, entradas, resumo.
+  Banks             [App] Contas bancárias + extratos (upload/parse) — perfil company.
+  Financials        [App] "A Minha Carteira" (personal) → transações, despesas, metas.
+  TransactionHistory[App] Histórico de transações → DataTable filtrável.
+  Reports           [App] Relatórios financeiros → ChartCards (Recharts) + export.
+  ProductAnalytics  [App/Admin] Analytics de produto → dashboards de gráficos.
+
+— SUPORTE / DEFINIÇÕES DO UTILIZADOR —
+  FeedbackCenter    [App] Enviar/gerir feedback.
+  CustomerSupport   [App] Suporte (chat/tickets).
+  Profile           [App] Perfil pessoal (dados, foto, preferências, idioma, tema).
+  WorkspaceSettings [App] Definições do workspace (empresa, moeda, módulos, membros).
+
+— WIKIMA ADMIN (role === 'admin') —
+  UserManagement        [Admin] Utilizadores da plataforma → DataTable + ações.
+  SubscriptionManagement[Admin] Subscrições/planos.
+  PlatformSettings      [Admin] Definições globais.
+  FeatureManagement     [Admin] Flags de funcionalidades.
+  AuditLogs             [Admin] Registos de auditoria → DataTable.
+  SystemMonitoring      [Admin] Monitorização/saúde do sistema → gráficos.
+  AdminFeedback         [Admin] Gestão do feedback recebido.
+
+================================================================================
+10. PADRÕES DE UI TRANSVERSAIS
+================================================================================
+Tabelas (TanStack Table + shadcn ui/table):
+  - Colunas tipadas, ordenação, filtro por coluna + pesquisa global, paginação,
+    seleção de linhas, colunas visíveis, densidade, estados loading (skeleton) e vazio.
+  - Um componente <DataTable> genérico reutilizado por todas as listas.
+Formulários (React Hook Form + Zod):
+  - Schema Zod por formulário; mensagens de erro i18n; estados submitting/disabled;
+    upload via api.integrations.Core.UploadFile; máscaras (moeda, telefone, NIF).
+Gráficos (Recharts):
+  - Wrapper <ChartCard> que injeta cores dos tokens; responsivo; tooltips com i18n
+    e formatação de moeda/data por locale.
+Feedback & estado:
+  - Toasts (sonner), diálogos de confirmação, skeletons, empty states com o motivo
+    de onda, e um error boundary por rota.
+Movimento (Framer Motion):
+  - Transições de rota (fade/slide curto), stagger de listas, hover/press subtis.
+  - Respeitar prefers-reduced-motion.
+Comando/atalhos (cmdk): paleta Ctrl/Cmd+K para saltar entre páginas e ações.
+
+================================================================================
+11. USO DOS ASSETS DA MARCA (imagens da pasta "WIKIMA Branding")
+================================================================================
+  - Copiar para o repo (SVG sempre que possível):
+      src/assets/brand/logo-horizontal.svg   (sidebar expandida, navbar pública)
+      src/assets/brand/logo-vertical.svg      (auth/splash)
+      src/assets/brand/wave-mark.svg          (favicon, sidebar recolhida, loader)
+      src/assets/brand/lettering.svg          (wordmark isolado)
+      public/wikima-logo.png                   (já existe; manter p/ og/favicon)
+      src/assets/brand/wave-bg-*.jpg|svg       (hero, auth, headers, empty states)
+  - Versões por tema: o logo em branco (assets atuais) para fundo escuro; gerar
+    variante navy/laranja para fundo claro (a partir dos SVG oficiais).
+  - Favicon/PWA: gerar a partir do ICONE (wave-mark) — atualizar manifest.json.
+  - As ondas usadas como textura devem ter opacidade/máscara para não competir com
+    o conteúdo (motivo de fundo, não protagonista, exceto no hero).
+
+================================================================================
+12. ESTRATÉGIA DE MIGRAÇÃO (faseada, sem partir a app)
+================================================================================
+  1. Fundações: tokens de tema (claro/escuro) + Tailwind + next-themes + fontes +
+     assets de marca + providers unificados. (App continua a funcionar.)
+  2. Design system: componentes ui/brand/data/forms base + Storybook-lite (página
+     interna /kitchen-sink para validar visualmente).
+  3. Casca partilhada: AppShell + Sidebar + Topbar + PageHeader; remover as sidebars
+     duplicadas das páginas à medida que migram.
+  4. Migração página a página, por domínio (ordem sugerida no roadmap), reusando os
+     hooks de dados e substituindo estilos inline por tokens/componentes.
+  5. i18n: extrair texto hardcoded para chaves à medida que cada página é migrada.
+  6. Limpeza final: remover VisualEditAgent, código morto, deps não usadas; auditar
+     acessibilidade, performance (lazy/code-split) e bundle.
+
+Regra de ouro: cada página migrada fica pixel-limpa (0 estilos inline, 0 cores
+hardcoded, i18n completo, claro/escuro OK) antes de passar à seguinte.
+
+================================================================================
+13. ROADMAP POR FASES (entregáveis)
+================================================================================
+  FASE 0 — Preparação  [CONCLUÍDA — 2026-07-01]
+    - Copiar assets de marca; definir paleta/tokens; escolher fontes; limpar resíduos.
+    - Entregável: index.css com tokens claro/escuro + tema aplicável globalmente.
+    FEITO:
+      * Deps instaladas: next-themes, i18next, react-i18next, i18next-browser-
+        languagedetector, @fontsource/{sora,inter}, @tanstack/react-table.
+      * Assets curados em src/assets/brand/ (logos dark/light, wave-mark, lettering,
+        wave-bg) + public/favicon.svg (ícone da onda).
+      * src/index.css reescrito com tokens WiKima (dark=padrão + light): background
+        navy #0B0C16, primary laranja #E88134, navy/slate; success/warning; radius 0.75.
+      * tailwind.config.js: fontFamily (Sora display / Inter sans) + cores brand/
+        success/warning.
+      * Fontes self-hosted importadas em main.jsx; StrictMode mantido OFF por agora.
+      * Tema: next-themes ThemeProvider (attribute=class, defaultTheme=dark, enableSystem)
+        + ThemeToggle (claro/escuro/sistema) + script no-flash no index.html.
+      * i18n: src/lib/i18n (i18next + LanguageDetector) a carregar as traduções legadas
+        (102 chaves PT/EN) na namespace 'translation'; LanguageContext.jsx passou a shim
+        de compatibilidade sobre react-i18next (os 75 consumidores continuam a funcionar).
+      * Limpeza: removido VisualEditAgent (editor visual do Base44) e o postMessage de
+        sandbox no main.jsx.
+    VERIFICADO: dev + build OK; html.class="dark"; tokens ativos (--background 233 33% 7%,
+      --primary 26 80% 56%); body=Inter, h1=Sora; sem erros de i18n/tema (só o ApiError
+      500 esperado por o backend não existir).
+  FASE 1 — Design system + Shell  [CONCLUÍDA — 2026-07-01]
+    - Componentes base + AppShell + Sidebar + Topbar + ThemeToggle + LanguageSwitcher.
+    - Entregável: navegar a app já dentro da nova casca, com tema e i18n a funcionar.
+    FEITO:
+      * Marca: src/components/brand/ — Logo (theme-aware light/dark via CSS),
+        WaveMark (ícone laranja), BrandSpinner + FullPageSpinner.
+      * Casca: src/components/layout/ — AppShell (sidebar fixa colapsável no desktop
+        + off-canvas Sheet no mobile + topbar sticky), Sidebar (grupos/perfis a partir
+        de nav-config.js, rotas REST, secção Admin, ativo com token/indicador laranja,
+        tooltips quando colapsada), Topbar (menu, colapso, WorkspaceSwitcher, pesquisa,
+        notificações, LanguageSwitcher, ThemeToggle, UserMenu), PageHeader + PageContainer.
+      * Dados: src/components/data/ — StatCard (KPI+trend), ChartCard (Recharts com
+        cores dos tokens), DataTable (TanStack Table: sort/filtro global/paginação/
+        skeleton/empty), EmptyState (watermark da onda).
+      * Preview: página /design (kitchen-sink, rota pública) com PageHeader, KPIs,
+        gráficos (barras + linha), DataTable, botões/badges e empty state.
+    VERIFICADO: /design renderiza dentro da casca; toggle de tema dark<->light aplica
+      os tokens em tudo (sidebar, cards, gráficos, logo troca de variante); i18n PT/EN
+      ativo; charts a usar --chart-*; dev + build OK (built ~19s). Sem erros de runtime
+      (só o ApiError 500 esperado por o backend não existir).
+  FASE 2 — Público + Auth  [CONCLUÍDA — 2026-07-01]
+    - Landing, Home, About, Features, Plans, Login, Register, Forgot/Reset, Onboarding.
+    - Entregável: fluxo de entrada e marketing 100% redesenhado.
+    FEITO (parte 1):
+      * AuthLayout reescrito → split-screen de marca (painel navy + wave mark + logo,
+        toggles de tema/idioma). Login e Register reescritos com React Hook Form + Zod
+        (validação tipada), tokens, i18n; OAuth Google/Microsoft via componente
+        SocialAuthButtons; fluxo preservado (loginViaEmailPassword, register→OTP→
+        verifyOtp→setToken→/onboarding, resetPasswordRequest/resetPassword).
+        Forgot/ResetPassword herdam o novo AuthLayout automaticamente.
+      * PublicLayout (navbar + footer, logo, toggles, Login/CTA) para marketing.
+      * Landing reescrita com PublicLayout: hero (headline Sora + card de preview +
+        wave motif), value props, grelha de features, banda CTA; animações Framer
+        Motion; rota "/" passa a renderizar a nova Landing diretamente (sem o Layout
+        antigo). i18n: adicionadas ~55 chaves auth_/public_ (PT+EN).
+    FEITO (parte 2):
+      * About, Features, Plans reescritas com PublicLayout + tokens + marca (bilingue
+        PT/EN inline; removidos header duplicado e imagens externas unsplash).
+      * Rotas REST públicas ligadas: /about, /features, /plans; redirects das antigas
+        capitalizadas e /home -> "/".
+    FEITO (parte 3 — Onboarding + multimédia):
+      * Onboarding reescrito com tokens + marca (Logo, stepper com barra de progresso,
+        transições Framer Motion AnimatePresence, cartões de seleção com tokens, backdrop
+        de imagem+overlay). LÓGICA 100% preservada (perfis personal/professional/company,
+        passos, canAdvance, handleFinish: Workspace/WorkspaceMember/OnboardingData/updateMe).
+        Rota /onboarding renderiza-o diretamente.
+      * Multimédia descarregada para public/media/: 5 imagens (Unsplash) + 2 vídeos
+        (Pexels, uso livre). Aplicadas: AuthLayout usa /media/auth-bg.jpg full-bleed
+        (CORRIGE o enquadramento do login), Onboarding usa o mesmo backdrop, About com
+        imagem no hero e banda "Visão", Landing com VÍDEO de fundo (loop, muted) na CTA.
+    VERIFICADO: Login (imagem full-bleed bem enquadrada), About (imagens), Landing (vídeo
+      a reproduzir na CTA) on-brand em dark; consola limpa (só ApiError 500 esperado);
+      build OK. Onboarding compila mas só se vê com sessão/backend (gate api.auth.me).
+  FASE 3 — Migração estrutural p/ AppShell  [CONCLUÍDA — 2026-07-01]
+    - AppLayout.jsx (route element pai): guard auth+onboarding, carrega workspaces,
+      deriva profile/isAdmin, envolve AppShell (Outlet) + providers legados.
+    - App.jsx: rotas REST minúsculas sob <Route element={<AppLayout/>}> + aliases
+      createPageUrl→canónica. As 34 páginas app perderam o chrome próprio
+      (DashboardSidebar + MobileMenuButton + lg:ml-64) e renderizam no AppShell.
+    - build OK; /dashboard→/login (guard) validado. (Cobre os conjuntos das antigas
+      Fases 3–6 de uma só vez, ao nível de routing/shell.)
+  FASE 4 — RE-TEMA das páginas app  [CONCLUÍDA (mecânica) — 2026-07-01]
+    - Script mapeou cores hardcoded (bg-[#0f172a], text-white, bg-cyan-500, slate, …) para
+      tokens (bg-background/card/muted, text-foreground/muted-foreground, primary, border)
+      em src/pages + src/components (excl. ui/layout/brand/data): ~3283 subst., 132 files.
+      Cores semânticas (red/green/amber/blue) mantidas. Corrigido over-reach nas páginas
+      marketing/auth: branco literal restaurado sobre overlays escuros fixos (Landing CTA,
+      About herói+Visão, AuthLayout painel). Validado dark+claro em /, /about, /login.
+    - FALTA (QA visual): páginas autenticadas precisam de backend p/ verificar; rever
+      possíveis banners/gradientes de componentes app com white-on-dark no modo claro.
+    - Por domínio: Núcleo/Trabalho (Dashboard, Tasks/TaskDetail, Agenda, Documents,
+      Services, Assignments, Stock); Clientes & Equipa (Clients/ClientProfile, Team/
+      TeamMemberProfile, Projects/ProjectProfile, Messages); Finanças (Invoices, Receipts,
+      CashRegister, Banks, Financials, TransactionHistory, Reports, ProductAnalytics);
+      Suporte/Definições + Admin (Profile, WorkspaceSettings, FeedbackCenter,
+      CustomerSupport + 7 páginas Admin). Requer backend p/ verificação visual.
+  FASE 7 — Acabamento
+    - Acessibilidade (AA), performance/code-split, PWA/manifest, QA PT/EN + temas,
+      limpeza de deps, documentação do design system.
+
+  (As fases 2–6 podem paralelizar-se por domínio depois da Fase 1.)
+
+================================================================================
+14. DECISÕES (FECHADAS — orientação do cliente 2026-07-01)
+================================================================================
+  D1. Tema padrão .......... ESCURO (preto) por defeito; toggle claro/sistema disponível.
+  D2. Cor primária ......... LARANJA #E88134 (ação/CTA, nos dois temas); navy #1A206A base.
+  D3. Tipografia ........... SORA (display) + INTER (corpo/UI), self-hosted (@fontsource).
+  D4. i18n ................. REACT-I18NEXT com namespaces por domínio.
+  D5. Abordagem ............ Redesenho IN-PLACE no mesmo repositório.
+  D6. URLs ................. REST/kebab (/clients/:id, /tasks/:id, /admin/users, …) + redirects.
+  D7. Landing vs Home ...... Consolidadas (Home absorvida pela Landing).
+  D8. Densidade ............ App produtivo mas arejado; marketing/auth espaçoso/premium.
+
+  Micro-decisões que resolvo durante a execução (posso ajustar a teu pedido):
+  - Escalas exatas de cor (50→950) e valores HSL finais dos tokens.
+  - Grelha de espaçamento, raios e sombras finais.
+  - Ordem de migração dentro de cada fase.
+  Se quiseres rever alguma antes, é só dizer.
+
+================================================================================
+15. DEFINIÇÃO DE "PRONTO" (por página)
+================================================================================
+  [ ] 0 estilos inline e 0 cores hardcoded (tudo via tokens/Tailwind).
+  [ ] Funciona em tema claro e escuro com contraste AA.
+  [ ] 100% do texto via i18n (PT e EN completos).
+  [ ] Estados: loading (skeleton), vazio (empty state), erro (boundary), sucesso (toast).
+  [ ] Responsivo (mobile → desktop) dentro do AppShell.
+  [ ] Dados via hooks TanStack Query + camada src/api/ (sem chamadas soltas).
+  [ ] Formulários com RHF+Zod; tabelas com DataTable; gráficos com ChartCard.
+  [ ] Acessibilidade: foco visível, navegação por teclado, aria, prefers-reduced-motion.
+
+================================================================================
+FIM DO PLANO — decisões fechadas (secção 14). Pronto para iniciar a FASE 0
+(tokens de tema escuro/claro + fontes Sora/Inter + assets de marca + providers +
+i18next) mal dês luz verde.
+================================================================================

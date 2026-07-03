@@ -1,0 +1,52 @@
+css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* WIKIMA BRAND COLORS - EXTRACTED FROM OFFICIAL LOGO */
+  /* LOCKED - DO NOT MODIFY */
+  
+  /* PRIMARY BLUE: Exact dark blue from "Wikima" text in logo */
+  --wikima-blue: #1c2d5f;
+  
+  /* ACCENT ORANGE: Exact color from logo wave */
+  --wikima-orange: #e97c3f;
+  
+  /* WHITE: For all text */
+  --wikima-white: #ffffff;
+  
+  /* BACKGROUNDS - Single dark blue only */
+  --bg-main: #1c2d5f;
+  --bg-sidebar: #1c2d5f;
+  --bg-card: #1c2d5f;
+  
+  /* BORDERS */
+  --border: rgba(255, 255, 255, 0.15);
+  
+  /* TEXT */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  
+  /* SEMANTIC COLORS - Status only */
+  --wikima-success: #22c55e;
+  --wikima-error: #ef4444;
+}
+
+body {
+  background-color: #1c2d5f;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@layer base {
+  button {
+    @apply transition-all duration-200;
+  }
+}

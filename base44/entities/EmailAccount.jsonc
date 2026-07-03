@@ -1,0 +1,62 @@
+{
+  "name": "EmailAccount",
+  "type": "object",
+  "properties": {
+    "provider": {
+      "type": "string",
+      "enum": [
+        "gmail",
+        "outlook"
+      ],
+      "description": "Email provider"
+    },
+    "email_address": {
+      "type": "string",
+      "format": "email",
+      "description": "User's email address"
+    },
+    "access_token": {
+      "type": "string",
+      "description": "OAuth2 access token (encrypted)"
+    },
+    "refresh_token": {
+      "type": "string",
+      "description": "OAuth2 refresh token (encrypted)"
+    },
+    "token_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Token expiration timestamp"
+    },
+    "sync_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable/disable automatic sync"
+    },
+    "last_sync_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last successful sync timestamp"
+    },
+    "sync_folders": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Gmail labels or Outlook folders to sync"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "error"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "provider",
+    "email_address"
+  ]
+}

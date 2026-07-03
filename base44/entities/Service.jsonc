@@ -1,0 +1,105 @@
+{
+  "name": "Service",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this service belongs to"
+    },
+    "service_name": {
+      "type": "string",
+      "description": "Name of the service provided"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Reference to Client"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Client name for quick reference"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the service"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Service start date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Service end date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Current service status"
+    },
+    "currency": {
+      "type": "string",
+      "default": "AOA",
+      "description": "Currency for this service (AOA, EUR, USD, etc.)"
+    },
+    "total_value": {
+      "type": "number",
+      "default": 0,
+      "description": "Total service value"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "invoice",
+              "proforma",
+              "order",
+              "receipt",
+              "contract",
+              "other"
+            ]
+          },
+          "file_url": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "uploaded_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "description": "Documents attached to this service"
+    },
+    "invoices_generated": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of invoice IDs generated from this service"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about the service"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "service_name",
+    "client_name",
+    "start_date",
+    "status"
+  ]
+}

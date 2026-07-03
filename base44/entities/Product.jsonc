@@ -1,0 +1,72 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this product belongs to"
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Product name"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "raw_material",
+        "equipment",
+        "consumable",
+        "finished_product",
+        "other"
+      ],
+      "default": "consumable",
+      "description": "Product category"
+    },
+    "quantity_available": {
+      "type": "number",
+      "default": 0,
+      "description": "Current stock quantity"
+    },
+    "minimum_stock_level": {
+      "type": "number",
+      "default": 10,
+      "description": "Minimum stock level for alerts"
+    },
+    "unit_cost": {
+      "type": "number",
+      "description": "Cost per unit"
+    },
+    "supplier": {
+      "type": "string",
+      "description": "Supplier name (optional)"
+    },
+    "unit": {
+      "type": "string",
+      "default": "unit",
+      "description": "Unit of measurement (unit, kg, liters, etc.)"
+    },
+    "sku": {
+      "type": "string",
+      "description": "Product SKU/code"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "discontinued"
+      ],
+      "default": "active",
+      "description": "Product status"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "product_name",
+    "quantity_available",
+    "minimum_stock_level"
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "name": "Invoice",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this invoice belongs to"
+    },
+    "invoice_number": {
+      "type": "string"
+    },
+    "service_id": {
+      "type": "string",
+      "description": "Reference to Service (if generated from service)"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "client_email": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "sent",
+        "paid",
+        "overdue",
+        "cancelled"
+      ],
+      "default": "draft"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "subtotal": {
+      "type": "number"
+    },
+    "tax": {
+      "type": "number"
+    },
+    "total": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR",
+      "description": "Currency code (AOA, EUR, USD, etc.)"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "paid_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "bank_transfer",
+        "mbway",
+        "paypal",
+        "stripe",
+        "cash",
+        "other"
+      ],
+      "description": "Method used for payment"
+    },
+    "payment_notes": {
+      "type": "string",
+      "description": "Additional notes about the payment"
+    },
+    "pdf_url": {
+      "type": "string",
+      "description": "Optional PDF upload of external invoice"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "client_name",
+    "date",
+    "total"
+  ]
+}

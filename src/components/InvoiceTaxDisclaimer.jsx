@@ -1,0 +1,83 @@
+import React, { useState } from 'react';
+import { AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+
+export default function InvoiceTaxDisclaimer({ language = 'pt' }) {
+  const [showFullDisclaimer, setShowFullDisclaimer] = useState(false);
+
+  return (
+    <Alert className="bg-amber-50 border-amber-300">
+      <AlertCircle className="h-4 w-4 text-amber-600" />
+      <AlertDescription className="text-sm text-amber-800">
+        {language === 'pt' ? (
+          <>
+            A WiKima fornece ferramentas de faturação e rastreamento de pagamentos apenas para fins administrativos. 
+            O cálculo fiscal e a conformidade permanecem da exclusiva responsabilidade do utilizador.
+          </>
+        ) : (
+          <>
+            WiKima provides invoicing and payment tracking tools for administrative purposes only. 
+            Tax calculation and compliance remain the sole responsibility of the user.
+          </>
+        )}
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowFullDisclaimer(!showFullDisclaimer)}
+          className="ml-2 h-auto p-0 text-amber-700 hover:text-amber-900 hover:bg-transparent underline"
+        >
+          {language === 'pt' ? 'Saber mais' : 'Learn more'}
+          {showFullDisclaimer ? (
+            <ChevronUp className="ml-1 h-3 w-3" />
+          ) : (
+            <ChevronDown className="ml-1 h-3 w-3" />
+          )}
+        </Button>
+
+        {showFullDisclaimer && (
+          <div className="mt-3 pt-3 border-t border-amber-300 text-xs leading-relaxed">
+            {language === 'pt' ? (
+              <>
+                <strong className="font-semibold">Aviso Legal Completo:</strong> A WiKima não fornece aconselhamento fiscal, jurídico ou contabilístico. 
+                As faturas geradas na WiKima são documentos comerciais e podem não substituir sistemas de faturação certificados exigidos em certas jurisdições. 
+                Qualquer cálculo fiscal, sugestão ou taxa automatizada fornecida pela WiKima é apenas para fins informativos. 
+                <strong> A responsabilidade fiscal final, a precisão e a conformidade permanecem inteiramente com o utilizador. A WiKima não é responsável por aplicação ou comunicação fiscal incorreta.</strong>
+                {' '}Quando integrações de pagamento estiverem ativadas, a WiKima pode associar pagamentos a faturas para fins de rastreamento. 
+                A WiKima não processa, coleta, remete ou reporta impostos em nome dos utilizadores. 
+                Serviços de pagamento são fornecidos por prestadores externos sob seus próprios termos e políticas.
+                {' '}Relatórios e exportações gerados pela WiKima são fornecidos para fins de gestão interna e manutenção de registos. 
+                Os utilizadores são responsáveis por rever os dados exportados antes de os utilizar para declarações fiscais, auditorias ou submissões oficiais.
+                {' '}O acesso a funcionalidades e limites na WiKima depende do plano de subscrição ativo do utilizador. 
+                A WiKima reserva-se o direito de aplicar restrições baseadas em planos e exigir upgrades de plano para acesso contínuo a certas funcionalidades.
+                {' '}Embora a WiKima tome medidas razoáveis para garantir a precisão e disponibilidade dos dados, não garante operação sem erros. 
+                A WiKima não será responsável por perdas financeiras, penalidades fiscais ou consequências legais resultantes do uso da plataforma.
+                {' '}Ao utilizar a WiKima, os utilizadores reconhecem que são totalmente responsáveis pelas suas decisões de negócio, obrigações fiscais e conformidade legal. 
+                A WiKima serve como uma ferramenta de apoio e não substitui serviços profissionais jurídicos ou contabilísticos.
+              </>
+            ) : (
+              <>
+                <strong className="font-semibold">Full Legal Disclaimer:</strong> WiKima does not provide tax, legal, or accounting advice. 
+                Invoices generated within WiKima are commercial documents and may not replace certified invoicing systems required by certain jurisdictions. 
+                Any tax calculation, suggestion, or automated rate provided by WiKima is for informational purposes only. 
+                <strong> Final tax responsibility, accuracy, and compliance remain entirely with the user. WiKima is not responsible for incorrect tax application or reporting.</strong>
+                {' '}When payment integrations are enabled, WiKima may associate payments with invoices for tracking purposes. 
+                WiKima does not process, collect, remit, or report taxes on behalf of users. 
+                Payment services are provided by third-party providers under their own terms and policies.
+                {' '}Reports and exports generated by WiKima are provided for internal management and record-keeping purposes. 
+                Users are responsible for reviewing exported data before using it for tax filings, audits, or official submissions.
+                {' '}Access to features and limits within WiKima depends on the user's active subscription plan. 
+                WiKima reserves the right to enforce plan-based restrictions and require plan upgrades for continued access to certain features.
+                {' '}While WiKima takes reasonable measures to ensure data accuracy and availability, it does not guarantee error-free operation. 
+                WiKima shall not be liable for financial loss, tax penalties, or legal consequences resulting from the use of the platform.
+                {' '}By using WiKima, users acknowledge that they are fully responsible for their business decisions, tax obligations, and legal compliance. 
+                WiKima serves as a support tool and not as a substitute for professional legal or accounting services.
+              </>
+            )}
+          </div>
+        )}
+      </AlertDescription>
+    </Alert>
+  );
+}

@@ -1,0 +1,88 @@
+{
+  "name": "RecurringPayment",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "e.g. Netflix, Rent, Electricity"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "rent",
+        "utilities",
+        "subscriptions",
+        "internet",
+        "school",
+        "insurance",
+        "loan",
+        "taxes",
+        "food",
+        "transport",
+        "health",
+        "entertainment",
+        "other"
+      ],
+      "default": "other"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR"
+    },
+    "billing_cycle": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "weekly",
+        "quarterly",
+        "yearly"
+      ],
+      "default": "monthly"
+    },
+    "due_day": {
+      "type": "number",
+      "description": "Day of month payment is due (1-31)"
+    },
+    "next_due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "last_paid_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "cancelled"
+      ],
+      "default": "active"
+    },
+    "reminder_days_before": {
+      "type": "number",
+      "default": 3,
+      "description": "Days before due date to remind"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "auto_reminder": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "workspace_id",
+    "name",
+    "amount",
+    "next_due_date"
+  ]
+}

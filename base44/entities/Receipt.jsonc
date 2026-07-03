@@ -1,0 +1,158 @@
+{
+  "name": "Receipt",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this receipt belongs to"
+    },
+    "receipt_number": {
+      "type": "string",
+      "description": "Receipt number/identifier"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Reference to Client"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Client name for quick reference"
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Related paid invoice ID"
+    },
+    "invoice_number": {
+      "type": "string",
+      "description": "Related invoice number for quick reference"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Receipt amount"
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "AOA",
+        "EUR",
+        "USD",
+        "BRL",
+        "GBP"
+      ],
+      "default": "EUR",
+      "description": "Currency code"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "cash",
+        "transfer",
+        "card",
+        "mobile",
+        "other"
+      ],
+      "default": "transfer",
+      "description": "Payment method used"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Receipt date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "issued",
+        "refunded",
+        "cancelled"
+      ],
+      "default": "issued",
+      "description": "Receipt status"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "Uploaded receipt file URL"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Original file name"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "File size in bytes"
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Reference to Document entity (cross-reference)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "issued",
+        "received"
+      ],
+      "default": "issued",
+      "description": "Whether receipt was issued or received"
+    },
+    "seller_company_name": {
+      "type": "string",
+      "description": "Seller company name at time of creation"
+    },
+    "seller_legal_name": {
+      "type": "string",
+      "description": "Seller legal name at time of creation"
+    },
+    "seller_tax_id": {
+      "type": "string",
+      "description": "Seller tax number at time of creation"
+    },
+    "seller_address": {
+      "type": "string",
+      "description": "Seller address at time of creation"
+    },
+    "seller_country": {
+      "type": "string",
+      "description": "Seller country at time of creation"
+    },
+    "seller_phone": {
+      "type": "string",
+      "description": "Seller phone at time of creation"
+    },
+    "seller_email": {
+      "type": "string",
+      "description": "Seller email at time of creation"
+    },
+    "seller_website": {
+      "type": "string",
+      "description": "Seller website at time of creation"
+    },
+    "seller_logo_url": {
+      "type": "string",
+      "description": "Seller logo URL at time of creation"
+    },
+    "seller_bank_name": {
+      "type": "string",
+      "description": "Seller bank name at time of creation"
+    },
+    "seller_iban": {
+      "type": "string",
+      "description": "Seller IBAN at time of creation"
+    },
+    "seller_swift_bic": {
+      "type": "string",
+      "description": "Seller SWIFT/BIC at time of creation"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "receipt_number",
+    "client_name",
+    "amount",
+    "currency",
+    "date"
+  ]
+}

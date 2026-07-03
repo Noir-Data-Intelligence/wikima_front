@@ -1,0 +1,37 @@
+{
+  "name": "FinancialGoal",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Goal title"
+    },
+    "target_amount": {
+      "type": "number",
+      "description": "Target amount to reach"
+    },
+    "current_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Current progress toward goal"
+    },
+    "month": {
+      "type": "string",
+      "description": "Month for this goal (YYYY-MM format)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "achieved",
+        "missed"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "title",
+    "target_amount",
+    "month"
+  ]
+}

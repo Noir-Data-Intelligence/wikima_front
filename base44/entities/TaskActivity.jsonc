@@ -1,0 +1,68 @@
+{
+  "name": "TaskActivity",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this activity belongs to"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Reference to Task"
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "created",
+        "assigned",
+        "status_changed",
+        "edited",
+        "completed",
+        "reopened",
+        "priority_changed",
+        "deadline_changed"
+      ],
+      "description": "Type of action performed"
+    },
+    "action_label_pt": {
+      "type": "string",
+      "description": "Human-readable action in Portuguese"
+    },
+    "action_label_en": {
+      "type": "string",
+      "description": "Human-readable action in English"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User who performed the action"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Name of user who performed the action"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of user who performed the action"
+    },
+    "old_value": {
+      "type": "string",
+      "description": "Previous value (for changes)"
+    },
+    "new_value": {
+      "type": "string",
+      "description": "New value (for changes)"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the activity occurred"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "task_id",
+    "action_type",
+    "user_id",
+    "user_name"
+  ]
+}

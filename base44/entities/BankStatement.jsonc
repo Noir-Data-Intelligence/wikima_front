@@ -1,0 +1,97 @@
+{
+  "name": "BankStatement",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this statement belongs to"
+    },
+    "bank_account_id": {
+      "type": "string",
+      "description": "Reference to BankAccount"
+    },
+    "bank_name": {
+      "type": "string",
+      "description": "Bank name for quick reference"
+    },
+    "account_name": {
+      "type": "string",
+      "description": "Account name for quick reference"
+    },
+    "month": {
+      "type": "number",
+      "description": "Statement month (1-12)"
+    },
+    "year": {
+      "type": "number",
+      "description": "Statement year"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "received"
+      ],
+      "default": "received",
+      "description": "Statement status - received means ready for reconciliation"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "Uploaded statement file URL"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Original file name"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "File size in bytes"
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Reference to Document entity (cross-reference)"
+    },
+    "upload_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When statement was uploaded"
+    },
+    "opening_balance": {
+      "type": "number",
+      "description": "Opening balance for the month"
+    },
+    "closing_balance": {
+      "type": "number",
+      "description": "Closing balance for the month"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Statement currency"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    },
+    "accountant_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether accountant has verified this statement"
+    },
+    "verified_by": {
+      "type": "string",
+      "description": "Email of user who verified"
+    },
+    "verified_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "bank_account_id",
+    "bank_name",
+    "month",
+    "year",
+    "file_url"
+  ]
+}

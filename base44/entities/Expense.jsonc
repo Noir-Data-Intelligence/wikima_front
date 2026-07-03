@@ -1,0 +1,89 @@
+{
+  "name": "Expense",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this expense belongs to"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Transaction amount"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Housing",
+        "Home Services",
+        "Food",
+        "Transport",
+        "Children & Education",
+        "Health",
+        "Leisure & Personal",
+        "Business & Work",
+        "Banks & Other",
+        "Savings",
+        "Investments",
+        "Salary",
+        "Sales",
+        "Freelance",
+        "Gift",
+        "Other Income",
+        "Other"
+      ],
+      "default": "Other",
+      "description": "Main Kakebo category"
+    },
+    "subcategory": {
+      "type": "string",
+      "description": "Subcategory within main category (e.g. Supermarket, Fuel, Netflix)"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "expense",
+        "income",
+        "savings",
+        "investment"
+      ],
+      "default": "expense",
+      "description": "Transaction type"
+    },
+    "feeling": {
+      "type": "string",
+      "enum": [
+        "necessary",
+        "important",
+        "investment",
+        "impulse",
+        "comfort"
+      ],
+      "description": "Emotional context of the expense"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Transaction date"
+    },
+    "note": {
+      "type": "string",
+      "description": "Optional note about the transaction"
+    },
+    "receipt_url": {
+      "type": "string",
+      "description": "Optional receipt/attachment URL"
+    },
+    "auto_categorized": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this was auto-categorized by AI"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "amount",
+    "category",
+    "date",
+    "type"
+  ]
+}

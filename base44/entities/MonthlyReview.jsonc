@@ -1,0 +1,36 @@
+{
+  "name": "MonthlyReview",
+  "type": "object",
+  "properties": {
+    "month": {
+      "type": "string",
+      "description": "Month of review (YYYY-MM format)"
+    },
+    "total_income": {
+      "type": "number",
+      "description": "Total income for the month"
+    },
+    "total_expenses": {
+      "type": "number",
+      "description": "Total expenses for the month"
+    },
+    "balance": {
+      "type": "number",
+      "description": "Net balance (income - expenses)"
+    },
+    "ai_reflection": {
+      "type": "string",
+      "description": "AI-generated monthly reflection"
+    },
+    "top_expense_category": {
+      "type": "string",
+      "description": "Category with highest expenses"
+    }
+  },
+  "required": [
+    "month",
+    "total_income",
+    "total_expenses",
+    "balance"
+  ]
+}

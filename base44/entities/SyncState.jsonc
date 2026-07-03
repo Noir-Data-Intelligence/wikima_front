@@ -1,0 +1,21 @@
+{
+  "name": "SyncState",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Identifier for this sync state, e.g. 'google_calendar'"
+    },
+    "sync_token": {
+      "type": "string",
+      "description": "Google Calendar incremental sync token"
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this sync state belongs to"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

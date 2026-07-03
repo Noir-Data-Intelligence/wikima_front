@@ -1,0 +1,84 @@
+{
+  "name": "SupportTicket",
+  "type": "object",
+  "properties": {
+    "customer_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Customer email"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Customer name"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Ticket subject/topic"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "waiting_customer",
+        "waiting_admin",
+        "resolved",
+        "closed"
+      ],
+      "default": "open",
+      "description": "Ticket status"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "normal",
+        "high",
+        "urgent"
+      ],
+      "default": "normal"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "Admin email assigned to ticket"
+    },
+    "last_message_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of last message"
+    },
+    "last_message_from": {
+      "type": "string",
+      "enum": [
+        "customer",
+        "admin",
+        "ai"
+      ],
+      "description": "Who sent the last message"
+    },
+    "ai_handled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether AI has attempted to handle this ticket"
+    },
+    "escalated_to_human": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether AI escalated to human support"
+    },
+    "unread_by_admin": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of unread messages by admin"
+    },
+    "unread_by_customer": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of unread messages by customer"
+    }
+  },
+  "required": [
+    "customer_email",
+    "customer_name",
+    "subject"
+  ]
+}

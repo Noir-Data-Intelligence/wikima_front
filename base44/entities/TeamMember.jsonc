@@ -1,0 +1,100 @@
+{
+  "name": "TeamMember",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this team member belongs to"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "Full name of the team member"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Team member email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone number (optional)"
+    },
+    "role": {
+      "type": "string",
+      "description": "Role or position (e.g. Developer, Designer)"
+    },
+    "department": {
+      "type": "string",
+      "description": "Department or area (e.g. Engineering, Marketing)"
+    },
+    "app_role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "manager",
+        "member"
+      ],
+      "default": "member",
+      "description": "Permission level within the app"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "default": "active",
+      "description": "Member status"
+    },
+    "avatar_color": {
+      "type": "string",
+      "description": "Color for avatar placeholder"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    },
+    "invitation_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "expired"
+      ],
+      "default": "pending",
+      "description": "Status of the invitation sent to this member"
+    },
+    "invitation_token": {
+      "type": "string",
+      "description": "Unique token for the invite link"
+    },
+    "invitation_sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invitation was sent"
+    },
+    "joined_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the member accepted and joined"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Base44 user ID once they have accepted and registered"
+    },
+    "invited_by_email": {
+      "type": "string",
+      "description": "Email of the user who sent the invitation"
+    },
+    "invited_by_name": {
+      "type": "string",
+      "description": "Name of the user who sent the invitation"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "full_name",
+    "email",
+    "role"
+  ]
+}

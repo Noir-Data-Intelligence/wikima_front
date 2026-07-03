@@ -1,0 +1,59 @@
+{
+  "name": "SavingsGoal",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "e.g. Emergency Fund, Vacation, Car"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "emergency",
+        "vacation",
+        "car",
+        "investment",
+        "education",
+        "home",
+        "health",
+        "other"
+      ],
+      "default": "other"
+    },
+    "target_amount": {
+      "type": "number"
+    },
+    "current_amount": {
+      "type": "number",
+      "default": 0
+    },
+    "target_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "achieved",
+        "paused"
+      ],
+      "default": "active"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "emoji": {
+      "type": "string",
+      "default": "\ud83c\udfaf"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "name",
+    "target_amount"
+  ]
+}

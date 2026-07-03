@@ -1,0 +1,119 @@
+{
+  "name": "Task",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this task belongs to"
+    },
+    "title": {
+      "type": "string",
+      "description": "Task title"
+    },
+    "description": {
+      "type": "string"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "TeamMember ID assigned to this task"
+    },
+    "assigned_to_name": {
+      "type": "string",
+      "description": "Team member name for quick reference"
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "urgent"
+      ],
+      "default": "medium"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "todo",
+        "in_progress",
+        "waiting",
+        "completed",
+        "cancelled"
+      ],
+      "default": "todo"
+    },
+    "reminder": {
+      "type": "string",
+      "enum": [
+        "none",
+        "same_day",
+        "1_day",
+        "3_days",
+        "1_week"
+      ],
+      "default": "none",
+      "description": "Reminder timing for this task"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or comments"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "progress": {
+      "type": "number",
+      "default": 0,
+      "description": "Completion percentage based on checklist"
+    },
+    "estimated_hours": {
+      "type": "number",
+      "description": "Estimated hours to complete the task"
+    },
+    "actual_hours": {
+      "type": "number",
+      "default": 0,
+      "description": "Actual hours logged on the task"
+    },
+    "is_recurring": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this task recurs"
+    },
+    "recurrence_pattern": {
+      "type": "string",
+      "enum": [
+        "daily",
+        "weekly",
+        "monthly",
+        "yearly"
+      ],
+      "description": "Recurrence pattern"
+    },
+    "parent_task_id": {
+      "type": "string",
+      "description": "Reference to the original recurring task template"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "title"
+  ]
+}

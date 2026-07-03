@@ -1,0 +1,96 @@
+{
+  "name": "PricingPlan",
+  "type": "object",
+  "properties": {
+    "plan_name": {
+      "type": "string",
+      "description": "Plan name (Free, Starter, Growth, Business)"
+    },
+    "plan_code": {
+      "type": "string",
+      "enum": [
+        "free",
+        "starter",
+        "growth",
+        "business"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pricing": {
+      "type": "object",
+      "properties": {
+        "AOA": {
+          "type": "object",
+          "properties": {
+            "monthly": {
+              "type": "number"
+            },
+            "annual": {
+              "type": "number"
+            }
+          }
+        },
+        "EUR": {
+          "type": "object",
+          "properties": {
+            "monthly": {
+              "type": "number"
+            },
+            "annual": {
+              "type": "number"
+            }
+          }
+        },
+        "USD": {
+          "type": "object",
+          "properties": {
+            "monthly": {
+              "type": "number"
+            },
+            "annual": {
+              "type": "number"
+            }
+          }
+        },
+        "BRL": {
+          "type": "object",
+          "properties": {
+            "monthly": {
+              "type": "number"
+            },
+            "annual": {
+              "type": "number"
+            }
+          }
+        },
+        "GBP": {
+          "type": "object",
+          "properties": {
+            "monthly": {
+              "type": "number"
+            },
+            "annual": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "plan_name",
+    "plan_code"
+  ]
+}

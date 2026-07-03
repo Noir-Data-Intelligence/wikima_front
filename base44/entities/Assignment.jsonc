@@ -1,0 +1,97 @@
+{
+  "name": "Assignment",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace this assignment belongs to"
+    },
+    "title": {
+      "type": "string",
+      "description": "Assignment title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Assignment description"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Reference to Project entity"
+    },
+    "project_name": {
+      "type": "string",
+      "description": "Project name for quick reference"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Reference to Client entity"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Client name for quick reference"
+    },
+    "assigned_to_id": {
+      "type": "string",
+      "description": "TeamMember ID assigned to this assignment"
+    },
+    "assigned_to_name": {
+      "type": "string",
+      "description": "Team member name for quick reference"
+    },
+    "created_by_id": {
+      "type": "string",
+      "description": "User ID who created this assignment"
+    },
+    "created_by_name": {
+      "type": "string",
+      "description": "Name of user who created this assignment"
+    },
+    "created_by_email": {
+      "type": "string",
+      "description": "Email of user who created this assignment"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "in_progress",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Assignment status"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "urgent"
+      ],
+      "default": "medium",
+      "description": "Assignment priority"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Assignment due date"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the assignment was completed"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or comments"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "title",
+    "project_id",
+    "client_id",
+    "assigned_to_id"
+  ]
+}

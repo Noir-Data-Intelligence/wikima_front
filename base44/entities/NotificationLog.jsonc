@@ -1,0 +1,70 @@
+{
+  "name": "NotificationLog",
+  "type": "object",
+  "properties": {
+    "reminder_id": {
+      "type": "string",
+      "description": "Reference to Reminder entity"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of reminder"
+    },
+    "category": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "email",
+        "whatsapp",
+        "push",
+        "in_app"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "sent",
+        "failed",
+        "pending",
+        "retry"
+      ],
+      "default": "pending"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "delivered_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "opened_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "action_taken": {
+      "type": "string"
+    },
+    "retry_count": {
+      "type": "number",
+      "default": 0
+    },
+    "error_message": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional delivery info"
+    }
+  },
+  "required": [
+    "user_email",
+    "type",
+    "channel"
+  ]
+}
