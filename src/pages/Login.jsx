@@ -4,9 +4,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { Loader2, Mail, Lock, LogIn } from 'lucide-react';
+import { Loader2, Mail, Lock, LogIn, Wallet, Briefcase, Building2, Shield } from 'lucide-react';
 
 import { api } from '@/api/client';
+import { MOCK_MODE, setMockPersona } from '@/api/mock';
 import AuthLayout from '@/components/AuthLayout';
 import SocialAuthButtons, { OrDivider } from '@/components/auth/SocialAuthButtons';
 import { Button } from '@/components/ui/button';
@@ -40,6 +41,24 @@ export default function Login() {
   };
 
   const loading = form.formState.isSubmitting;
+
+  // Dev-only quick logins (mock mode) — one account per user TYPE so every
+  // sidebar/permission set can be tested without a backend.
+  const testPersonas = [
+    { key: 'personal', label: 'Pessoal', desc: 'Finanças pessoais', icon: Wallet,
+      persona: { role: 'user', user_profile: 'personal', email: 'pessoal@wikima.app', full_name: 'Utilizador Pessoal' } },
+    { key: 'professional', label: 'Profissional', desc: 'Freelancer / independente', icon: Briefcase,
+      persona: { role: 'user', user_profile: 'professional', email: 'pro@wikima.app', full_name: 'Profissional Demo' } },
+    { key: 'company', label: 'Empresa', desc: 'Gestão de empresa', icon: Building2,
+      persona: { role: 'user', user_profile: 'company', email: 'empresa@wikima.app', full_name: 'Gestor Empresa' } },
+    { key: 'admin', label: 'Admin Plataforma', desc: 'Acesso total + WiKima Admin', icon: Shield,
+      persona: { role: 'admin', user_profile: 'company', email: 'admin@wikima.app', full_name: 'Admin WiKima' } },
+  ];
+
+  const quickLogin = (persona) => {
+    setMockPersona(persona);
+    window.location.href = '/dashboard';
+  };
 
   return (
     <AuthLayout
@@ -107,6 +126,33 @@ export default function Login() {
             </Button>
           </form>
         </Form>
+
+        {MOCK_MODE && (
+          <div className="mt-2 rounded-xl border border-dashed border-primary/30 bg-primary/5 p-3">
+            <p className="mb-2 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
+              Modo de teste — entrar como
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {testPersonas.map(({ key, label, desc, icon: Icon, persona }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => quickLogin(persona)}
+                  className="flex items-start gap-2.5 rounded-lg border border-border bg-card p-2.5 text-left transition-colors hover:border-primary/50 hover:bg-accent"
+                >
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-medium text-foreground">{label}</span>
+                    <span className="block truncate text-[11px] text-muted-foreground">{desc}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </AuthLayout>
   );

@@ -15,22 +15,60 @@ import { setToken as storeToken, clearToken } from './tokenStore';
 export const MOCK_MODE = import.meta.env.VITE_MOCK_AUTH === 'false' ? false : true;
 
 const EMAIL_KEY = 'mock_user_email';
+const ROLE_KEY = 'mock_user_role';
+const PROFILE_KEY = 'mock_user_profile';
+const NAME_KEY = 'mock_user_name';
 const MOCK_TOKEN = 'mock-dev-token';
 
-function currentEmail() {
+function lsGet(key, fallback) {
   try {
-    return window.localStorage.getItem(EMAIL_KEY) || 'demo@wikima.app';
+    return window.localStorage.getItem(key) || fallback;
   } catch {
-    return 'demo@wikima.app';
+    return fallback;
   }
 }
 
-function rememberEmail(email) {
+function lsSet(key, value) {
   try {
-    window.localStorage.setItem(EMAIL_KEY, email || 'demo@wikima.app');
+    window.localStorage.setItem(key, value);
   } catch {
     /* ignore */
   }
+}
+
+function lsRemove(key) {
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    /* ignore */
+  }
+}
+
+function currentEmail() {
+  return lsGet(EMAIL_KEY, 'demo@wikima.app');
+}
+
+function rememberEmail(email) {
+  lsSet(EMAIL_KEY, email || 'demo@wikima.app');
+}
+
+// Persona = which user TYPE the mock `me()` returns. Lets us test the different
+// sidebars/permissions (personal / professional / company / platform admin)
+// from the login screen without a backend. See setMockPersona / Login.jsx.
+export function setMockPersona({ email, full_name, role, user_profile }) {
+  if (email) lsSet(EMAIL_KEY, email);
+  if (full_name) lsSet(NAME_KEY, full_name);
+  if (role) lsSet(ROLE_KEY, role);
+  if (user_profile) lsSet(PROFILE_KEY, user_profile);
+  storeToken(MOCK_TOKEN);
+}
+
+// Reset persona to the default (platform admin, company) — used on a manual
+// email/password login so it always lands on the "everything visible" account.
+function clearPersona() {
+  lsRemove(ROLE_KEY);
+  lsRemove(PROFILE_KEY);
+  lsRemove(NAME_KEY);
 }
 
 const mockWorkspace = {
@@ -41,13 +79,14 @@ const mockWorkspace = {
 };
 
 export function mockUser() {
+  const name = lsGet(NAME_KEY, 'Utilizador Demo');
   return {
     id: 'mock-user-1',
-    full_name: 'Utilizador Demo',
-    name: 'Utilizador Demo',
+    full_name: name,
+    name,
     email: currentEmail(),
-    role: 'admin', // admin → all navigation (incl. WiKima Admin) is visible
-    user_profile: 'company', // company profile → richest sidebar
+    role: lsGet(ROLE_KEY, 'admin'), // admin → all navigation (incl. WiKima Admin) is visible
+    user_profile: lsGet(PROFILE_KEY, 'company'), // personal | professional | company
     onboarding_completed: true,
     show_guided_tour: false,
     current_workspace_id: mockWorkspace.id,
@@ -69,6 +108,7 @@ export const mockAuth = {
   updateMe: (data) => resolve({ ...mockUser(), ...data }),
   async loginViaEmailPassword(email) {
     rememberEmail(email);
+    clearPersona(); // manual login → default (platform admin) account
     storeToken(MOCK_TOKEN);
     return { access_token: MOCK_TOKEN, user: mockUser() };
   },
