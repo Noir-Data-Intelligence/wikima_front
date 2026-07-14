@@ -1,4 +1,3 @@
-import React from 'react';
 import { Wallet, Briefcase, Building2 } from 'lucide-react';
 
 const PROFILE_CONFIG = {

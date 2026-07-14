@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '@/api/client';
 
 const WorkspaceContext = createContext();
@@ -24,42 +24,33 @@ export const WorkspaceProvider = ({ children }) => {
   const loadWorkspaces = async () => {
     try {
       const user = await api.auth.me();
-      
-      // Get user's workspaces
-      const memberRecords = await api.entities.WorkspaceMember.filter({
-        user_email: user.email,
-        status: 'active'
-      });
-      
-      if (memberRecords.length === 0) {
+
+      // GET /workspace already returns only the caller's workspaces (the backend
+      // scopes the list to real memberships) — no member-record round-trip needed.
+      const list = await api.entities.Workspace.list();
+      setWorkspaces(Array.isArray(list) ? list : []);
+
+      if (!list || list.length === 0) {
         setLoading(false);
         return;
       }
 
-      // Fetch all workspace details
-      const workspacePromises = memberRecords.map(async (member) => {
-        const workspace = await api.entities.Workspace.filter({ id: member.workspace_id });
-        return { workspace: workspace[0], role: member.role, permissions: member.permissions };
-      });
-
-      const workspaceData = await Promise.all(workspacePromises);
-      setWorkspaces(workspaceData.map(w => w.workspace).filter(Boolean));
-
       // Set current workspace from user preferences or first workspace
-      let targetWorkspaceId = user.current_workspace_id || user.default_workspace_id;
-      
-      if (!targetWorkspaceId && workspaceData.length > 0) {
-        targetWorkspaceId = workspaceData[0].workspace.id;
+      const targetWorkspaceId = user.current_workspace_id || user.default_workspace_id;
+      const currentWs = list.find(w => w.id === targetWorkspaceId) || list[0];
+      setCurrentWorkspace(currentWs);
+
+      // The caller's own membership row gives the role in the current workspace.
+      try {
+        const membership = await api.entities.WorkspaceMember.filter({
+          workspace_id: currentWs.id,
+          user_email: user.email
+        });
+        setMemberRole(membership[0]?.role || 'member');
+      } catch {
+        setMemberRole('member');
       }
 
-      if (targetWorkspaceId) {
-        const currentWs = workspaceData.find(w => w.workspace?.id === targetWorkspaceId);
-        if (currentWs) {
-          setCurrentWorkspace(currentWs.workspace);
-          setMemberRole(currentWs.role);
-        }
-      }
-      
       setLoading(false);
     } catch (error) {
       console.error('Error loading workspaces:', error);
@@ -95,32 +86,12 @@ export const WorkspaceProvider = ({ children }) => {
 
   const createWorkspace = async (workspaceData) => {
     try {
-      const user = await api.auth.me();
-      
-      const newWorkspace = await api.entities.Workspace.create({
-        ...workspaceData,
-        owner_email: user.email
-      });
-
-      // Create workspace member record for owner
-      await api.entities.WorkspaceMember.create({
-        workspace_id: newWorkspace.id,
-        user_email: user.email,
-        role: 'owner',
-        status: 'active',
-        joined_date: new Date().toISOString(),
-        permissions: {
-          can_manage_tasks: true,
-          can_manage_clients: true,
-          can_manage_documents: true,
-          can_manage_invoices: true,
-          can_view_financials: true,
-          can_manage_members: true
-        }
-      });
+      // The backend derives the owner from the authenticated user and creates the
+      // owner membership in the same transaction — no WorkspaceMember.create here.
+      const newWorkspace = await api.entities.Workspace.create(workspaceData);
 
       // Set as current workspace
-      await api.auth.updateMe({ 
+      await api.auth.updateMe({
         current_workspace_id: newWorkspace.id,
         default_workspace_id: newWorkspace.id
       });

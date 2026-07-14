@@ -1,28 +1,15 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { useLanguage, LanguageProvider } from './components/LanguageContext';
 import { DemoModeProvider, useDemoMode } from './components/DemoModeContext';
 import { WorkspaceProvider } from './components/WorkspaceContext';
 import { UserTypeProvider } from './components/UserTypeContext';
 import { TierProvider } from './components/TierContext';
-import LanguageSwitcher from './components/LanguageSwitcher';
-import PWAInstallPrompt from './components/PWAInstallPrompt';
 import DemoModeBanner from './components/DemoModeBanner';
 import { api } from '@/api/client';
 
-import {
-  LayoutDashboard,
-  CheckSquare,
-  FileText,
-  Receipt,
-  MessageSquare,
-  CreditCard,
-  User,
-  Sparkles,
-  BarChart3,
-  Users
-} from 'lucide-react';
+
+
 
 // --- Global greeting function (evita ReferenceError) ---
 window.getGreeting = function(name = '') {

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { api } from '@/api/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
-  ArrowLeft, Edit, Mail, Phone, Building2, MapPin, FileText,
+  ArrowLeft, Edit, Mail, Building2, FileText,
   CheckSquare, Receipt, MessageSquare, Calendar, Save, Plus,
   Tag, Briefcase, Globe, ExternalLink,
   PhoneCall, Send, AlertCircle, Users, Activity,
@@ -17,8 +17,6 @@ import { createPageUrl } from '../utils';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { enUS } from 'date-fns/locale/en-US';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import ClientFormDialog from '../components/clients/ClientFormDialog';
 import CompanyClientSummary from '../components/clients/CompanyClientSummary';
 import { useWorkspace } from '../components/WorkspaceContext';

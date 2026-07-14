@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React from 'react';
 import { useLanguage } from '../LanguageContext';
 import { Link } from 'react-router-dom';
 import {
@@ -13,7 +13,6 @@ import {
   Clock,
   Gift,
   Settings,
-  KeyRound,
   Languages,
   LogOut,
   ChevronDown,

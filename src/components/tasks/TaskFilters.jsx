@@ -1,5 +1,3 @@
-import React from 'react';
-import { useLanguage } from '../../components/LanguageContext';
 import { X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 

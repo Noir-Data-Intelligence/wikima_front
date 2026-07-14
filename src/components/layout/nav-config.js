@@ -30,8 +30,8 @@ export function buildNavGroups(profile = 'company') {
       tKey: 'nav_group_clients', fallback: 'Clients & Team', profiles: ['professional', 'company'],
       items: [
         { to: '/clients', tKey: 'nav_clients', fallback: 'Clients', icon: Users },
-        { to: '/team', tKey: 'nav_team', fallback: 'Team', icon: UserCircle2, profiles: ['company'] },
-        { to: '/projects', tKey: 'nav_projects', fallback: 'Projects', icon: FolderKanban, profiles: ['company'] },
+        { to: '/team', tKey: 'nav_team', fallback: 'Team', icon: UserCircle2, profiles: ['professional', 'company'] },
+        { to: '/projects', tKey: 'nav_projects', fallback: 'Projects', icon: FolderKanban, profiles: ['professional', 'company'] },
         { to: '/messages', tKey: 'nav_messages', fallback: 'Messages', icon: MessageSquare, profiles: ['company'] },
       ],
     },
@@ -40,6 +40,7 @@ export function buildNavGroups(profile = 'company') {
       tKey: 'nav_group_work', fallback: 'Work', profiles: ['professional', 'company'],
       items: [
         { to: '/tasks', tKey: 'nav_tasks', fallback: 'Tasks', icon: CheckSquare },
+        { to: '/assignments', tKey: 'nav_assignments', fallback: 'Assignments', icon: ClipboardList, profiles: ['professional', 'company'] },
         { to: '/agenda', tKey: 'nav_agenda', fallback: 'Agenda', icon: Calendar },
         { to: '/services', tKey: 'nav_services', fallback: 'Services', icon: Briefcase },
         { to: '/documents', tKey: 'nav_documents', fallback: 'Documents', icon: FileText },

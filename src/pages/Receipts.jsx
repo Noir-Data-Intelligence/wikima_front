@@ -1,11 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { api } from '@/api/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCompanyProfile } from '@/hooks/useCompanyProfile';
 import { useUserType } from '../components/UserTypeContext';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import ReceiptDialog from '../components/receipts/ReceiptDialog';
 import ReceiptPrintView from '../components/finance/ReceiptPrintView';
 import AccessGuard from '../components/AccessGuard';

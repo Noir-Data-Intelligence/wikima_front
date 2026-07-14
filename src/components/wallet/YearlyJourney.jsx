@@ -1,8 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale/pt-BR';
-import { enUS } from 'date-fns/locale/en-US';
-import { TrendingUp, TrendingDown, PiggyBank, Target, Star, Award, Heart, Leaf } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { TrendingUp, PiggyBank, Target, Star, Award, Heart, Leaf } from 'lucide-react';
 import { KAKEBO_CATEGORIES } from './KakeboCategories';
 
 const MONTHS_PT = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];

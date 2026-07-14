@@ -6,15 +6,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, ListTodo, LayoutGrid, Calendar, Search, Filter, SortAsc, User, Users } from 'lucide-react';
+import { Plus, ListTodo, LayoutGrid, Calendar, Search, Filter, SortAsc } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createPageUrl } from '../utils';
 import { toast } from 'sonner';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { usePlanCheck } from '../components/usePlanCheck';
 import PlanLimitModal from '../components/PlanLimitModal';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import TaskRow from '../components/tasks/TaskRow';
 import TaskCard from '../components/tasks/TaskCard';
 import TaskDialog from '../components/tasks/TaskDialog';
@@ -37,7 +35,6 @@ export default function Tasks() {
   const [filterPriority, setFilterPriority] = useState('all');
   const [filterAssigned, setFilterAssigned] = useState('all');
   const [sortBy, setSortBy] = useState('deadline');
-  const [showHistory, setShowHistory] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -71,8 +68,14 @@ export default function Tasks() {
     queryFn: async () => { const id = await getWsId(); if (!id) return []; return api.entities.TeamMember.filter({ workspace_id: id, status: 'active' }, 'full_name'); }
   });
 
+  const { data: projectsData = [] } = useQuery({
+    queryKey: ['projects'], enabled: !isDemoMode && isCompany,
+    queryFn: async () => { const id = await getWsId(); if (!id) return []; return api.entities.Project.filter({ workspace_id: id }, 'name'); }
+  });
+
   const tasks = isDemoMode ? demoData.tasks : tasksData;
   const clients = isDemoMode ? demoData.clients : clientsData;
+  const projects = isDemoMode ? demoData.projects : projectsData;
 
   const createMutation = useMutation({
     mutationFn: async (data) => {
@@ -82,6 +85,10 @@ export default function Tasks() {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       toast.success(pt ? '✅ Tarefa criada!' : '✅ Task created!');
+    },
+    onError: (error) => {
+      console.error('Task create failed:', error);
+      toast.error(error?.message || (pt ? 'Erro ao criar tarefa' : 'Failed to create task'));
     }
   });
 
@@ -90,6 +97,10 @@ export default function Tasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       toast.success(pt ? '✅ Atualizada!' : '✅ Updated!');
+    },
+    onError: (error) => {
+      console.error('Task update failed:', error);
+      toast.error(error?.message || (pt ? 'Erro ao atualizar tarefa' : 'Failed to update task'));
     }
   });
 
@@ -98,6 +109,10 @@ export default function Tasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       toast.success(pt ? '🗑️ Eliminada' : '🗑️ Deleted');
+    },
+    onError: (error) => {
+      console.error('Task delete failed:', error);
+      toast.error(error?.message || (pt ? 'Erro ao eliminar tarefa' : 'Failed to delete task'));
     }
   });
 
@@ -135,8 +150,7 @@ export default function Tasks() {
   };
 
   // Filter and sort tasks
-  const activeTasks = tasks.filter(t => showHistory ? t.status === 'completed' : t.status !== 'completed');
-  const filteredTasks = activeTasks.filter(t => {
+  const filteredTasks = tasks.filter(t => {
     const matchSearch = !searchTerm || t.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchStatus = filterStatus === 'all' || t.status === filterStatus;
     const matchClient = filterClient === 'all' || !t.client_name || t.client_name === filterClient;
@@ -253,7 +267,7 @@ export default function Tasks() {
                     {isCompany && <div className="col-span-2">{pt ? 'Atribuída a' : 'Assigned'}</div>}
                     {isCompany && <div className="col-span-2">{pt ? 'Tempo' : 'Time'}</div>}
                     <div className="col-span-2">{pt ? 'Estado' : 'Status'}</div>
-                    <div className="col-span-1"></div>
+                    <div className="col-span-1">{pt ? 'Prazo' : 'Due'}</div>
                   </div>
                   {/* Task Rows or Empty State */}
                   {filteredTasks.length === 0 ? (
@@ -269,7 +283,6 @@ export default function Tasks() {
                           onEdit={(t) => { setEditingTask(t); setShowDialog(true); }}
                           onStatusChange={handleStatusChange}
                           language={language}
-                          showHistory={showHistory}
                           userType={userType}
                         />
                       ))}
@@ -389,6 +402,7 @@ export default function Tasks() {
           onDelete={(id) => deleteMutation.mutate(id)}
           clients={clients}
           teamMembers={teamMembers}
+          projects={projects}
           userType={userType}
           language={language}
         />

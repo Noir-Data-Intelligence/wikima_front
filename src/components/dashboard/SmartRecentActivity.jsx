@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Users, CheckSquare, Receipt, FileText, UserCheck, Package, Calendar } from 'lucide-react';
+import { Users, CheckSquare, Receipt, FileText, Calendar } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { pt as ptLocale } from 'date-fns/locale/pt';
 import { enGB } from 'date-fns/locale/en-GB';

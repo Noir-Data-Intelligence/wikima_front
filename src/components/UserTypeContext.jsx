@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '@/api/client';
 import { getRecommendedModules } from '@/lib/sectorModules';
 
@@ -18,8 +18,8 @@ export const PROFILE_MODULES = {
     'CustomerSupport', 'WorkspaceSettings', 'Profile'
   ],
   professional: [
-    'Dashboard', 'Clients', 'Tasks', 'Agenda', 'Services', 'Documents',
-    'Invoices', 'Receipts', 'CashRegister', 'Financials',
+    'Dashboard', 'Clients', 'Projects', 'Team', 'Assignments', 'Tasks', 'Agenda',
+    'Services', 'Documents', 'Invoices', 'Receipts', 'CashRegister', 'Financials',
     'CustomerSupport', 'WorkspaceSettings', 'Profile'
   ],
   company: null // null = all modules visible
@@ -67,9 +67,9 @@ export const UserTypeProvider = ({ children }) => {
         // Default to 'company' so they see all menu groups
         if (workspaceId) {
           try {
-            const workspaces = await api.entities.Workspace.filter({ id: workspaceId });
-            const ws = workspaces[0];
-            setUserProfile(ws?.type === 'company' ? 'company' : 'professional');
+            // Backend workspace types are 'personal' | 'business'.
+            const ws = await api.entities.Workspace.get(workspaceId);
+            setUserProfile(ws?.type === 'business' ? 'company' : 'professional');
           } catch {
             setUserProfile('company');
           }
@@ -79,12 +79,13 @@ export const UserTypeProvider = ({ children }) => {
       }
 
       // Load recommended modules from workspace sector config
+      // (company_info lives inside the workspace's jsonb settings on the backend).
       if (workspaceId) {
         try {
-          const workspaces = await api.entities.Workspace.filter({ id: workspaceId });
-          const ws = workspaces[0];
-          const sector = ws?.company_info?.business_sector;
-          const stored = ws?.company_info?.recommended_modules;
+          const ws = await api.entities.Workspace.get(workspaceId);
+          const companyInfo = ws?.settings?.company_info || ws?.company_info;
+          const sector = companyInfo?.business_sector;
+          const stored = companyInfo?.recommended_modules;
           if (stored?.length) {
             setRecommendedModules(stored);
           } else if (sector) {

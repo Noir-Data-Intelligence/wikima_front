@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { api } from '@/api/client';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User, Building2, Bell, Link as LinkIcon, Sparkles, LogOut, Upload, Trash2, Shield, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import PlanLimitModal from '../components/PlanLimitModal';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
 import GmailIntegration from '../components/GmailIntegration';
 
 export default function Profile() {

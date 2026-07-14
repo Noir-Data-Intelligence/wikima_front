@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { api } from '@/api/client';
-import { createPageUrl } from '../utils';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import {
-  MessageSquarePlus, Bug, Lightbulb, Star, Send, CheckCircle2,
-  ChevronDown, TrendingUp, Smile
+  MessageSquarePlus, Bug, Lightbulb, Star, Send, CheckCircle2, TrendingUp
 } from 'lucide-react';
 
 const CATEGORIES = {

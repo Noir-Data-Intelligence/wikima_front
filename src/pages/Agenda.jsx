@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '@/api/client';
 import { useLanguage } from '../components/LanguageContext';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import EventDialog from '../components/agenda/EventDialog';
-import { Calendar, ChevronLeft, ChevronRight, Plus, Clock, MapPin, User, CheckSquare, AlertCircle, Wallet, FolderOpen } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, Plus, Clock, MapPin, User, CheckSquare, Wallet, FolderOpen } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { usePersonalPayments } from '../hooks/usePersonalPayments';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, startOfWeek, endOfWeek, addDays, parseISO } from 'date-fns';

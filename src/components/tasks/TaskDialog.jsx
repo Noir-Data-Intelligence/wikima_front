@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -53,10 +52,11 @@ export default function TaskDialog({ open, onClose, task, onSave, onDelete, clie
     const urlParams = new URLSearchParams(window.location.search);
     const clientId = urlParams.get('clientId');
     const clientName = urlParams.get('clientName');
-    
+
     if (clientId && clientName && !task) {
-      setLockedClient({ id: clientId, name: clientName });
-      setForm(prev => ({ ...prev, client_id: clientId, client_name: clientName }));
+      const decodedName = decodeURIComponent(clientName);
+      setLockedClient({ id: clientId, name: decodedName });
+      setForm(prev => ({ ...prev, client_id: clientId, client_name: decodedName }));
     }
   }, [task]);
 
@@ -85,7 +85,7 @@ export default function TaskDialog({ open, onClose, task, onSave, onDelete, clie
         title: '', description: '', client_id: '', client_name: '',
         project_id: '', project_name: '',
         assigned_to: '', assigned_to_name: '', deadline: '',
-        priority: 'medium', status: 'todo', reminder: 'none',
+        priority: 'medium', status: 'todo', reminder: 'none', category: '',
         estimated_hours: '', actual_hours: '',
         is_recurring: false, recurrence_pattern: ''
       });
@@ -103,7 +103,14 @@ export default function TaskDialog({ open, onClose, task, onSave, onDelete, clie
       toast.error(pt ? 'Seleciona um projeto' : 'Please select a project');
       return;
     }
-    onSave(form);
+    onSave({
+      ...form,
+      estimated_hours: form.estimated_hours === '' ? null : Number(form.estimated_hours),
+      actual_hours: form.actual_hours === '' ? null : Number(form.actual_hours),
+      recurrence_pattern: form.recurrence_pattern || null,
+      category: form.category || null,
+      reminder: form.reminder || null,
+    });
     onClose();
   };
 
@@ -222,11 +229,15 @@ export default function TaskDialog({ open, onClose, task, onSave, onDelete, clie
                 {showClient && clients.length > 0 && (
                   <div>
                     <Label className="text-[10px] text-muted-foreground mb-1 block">{pt ? 'Cliente' : 'Client'} <span className="text-muted-foreground">({pt ? 'opcional' : 'optional'})</span></Label>
-                    <Select 
-                      value={form.client_name} 
+                    <Select
+                      value={form.client_name || 'none'}
                       onValueChange={(value) => {
-                        const selected = clients.find(c => c.name === value);
-                        setForm({ ...form, client_name: value, client_id: selected?.id || '' });
+                        if (value === 'none') {
+                          setForm({ ...form, client_name: '', client_id: '' });
+                        } else {
+                          const selected = clients.find(c => c.name === value);
+                          setForm({ ...form, client_name: value, client_id: selected?.id || '' });
+                        }
                       }}
                       disabled={!!lockedClient}
                     >
@@ -234,7 +245,7 @@ export default function TaskDialog({ open, onClose, task, onSave, onDelete, clie
                         <SelectValue placeholder={pt ? 'Nenhum' : 'None'} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={null}>{pt ? 'Nenhum' : 'None'}</SelectItem>
+                        <SelectItem value="none">{pt ? 'Nenhum' : 'None'}</SelectItem>
                         {clients.map(client => (
                           <SelectItem key={client.id} value={client.name}>{client.name}</SelectItem>
                         ))}
@@ -331,12 +342,15 @@ export default function TaskDialog({ open, onClose, task, onSave, onDelete, clie
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <Label className="text-[10px] text-muted-foreground mb-1 block">{pt ? 'Categoria' : 'Category'} <span className="text-muted-foreground">({pt ? 'opcional' : 'optional'})</span></Label>
-                  <Select value={form.category} onValueChange={v => setForm({ ...form, category: v })}>
+                  <Select
+                    value={form.category || 'none'}
+                    onValueChange={v => setForm({ ...form, category: v === 'none' ? '' : v })}
+                  >
                     <SelectTrigger className="h-7 text-xs bg-background border-border text-foreground">
                       <SelectValue placeholder={pt ? 'Selecionar' : 'Select'} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={null}>{pt ? 'Nenhuma' : 'None'}</SelectItem>
+                      <SelectItem value="none">{pt ? 'Nenhuma' : 'None'}</SelectItem>
                       {TASK_CATEGORIES.map(cat => (
                         <SelectItem key={cat.value} value={cat.value}>
                           {pt ? cat.label_pt : cat.label_en}

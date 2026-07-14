@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
 import { createPageUrl } from '../utils';
-import { formatCurrency, getCurrencySymbol, getDefaultCurrency } from '../utils/currency';
+import { formatCurrency, getDefaultCurrency } from '../utils/currency';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -29,8 +29,6 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { toast } from 'sonner';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import { Link } from 'react-router-dom';
 import ServiceAttachmentsDialog from '../components/ServiceAttachmentsDialog';
 import AccessGuard from '../components/AccessGuard';

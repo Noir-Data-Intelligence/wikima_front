@@ -1,4 +1,3 @@
-import React from 'react';
 import { useLanguage } from '../LanguageContext';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/api/client';

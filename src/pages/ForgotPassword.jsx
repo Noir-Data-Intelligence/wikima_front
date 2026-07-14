@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { api } from "@/api/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Mail, ArrowLeft, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 
 export default function ForgotPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -29,7 +30,7 @@ export default function ForgotPassword() {
     <AuthLayout
       icon={Mail}
       title="Reset password"
-      subtitle="We'll send you a link to reset it"
+      subtitle="We'll email you a code to reset it"
       footer={
         <Link to="/login" className="text-primary font-medium hover:underline">
           <ArrowLeft className="w-3 h-3 inline mr-1" />Back to log in
@@ -37,9 +38,18 @@ export default function ForgotPassword() {
       }
     >
       {sent ? (
-        <p className="text-sm text-foreground text-center">
-          If an account exists with that email, you'll receive a password reset link shortly.
-        </p>
+        <div className="space-y-4">
+          <p className="text-sm text-foreground text-center">
+            If an account exists with that email, you'll receive a password reset code shortly.
+          </p>
+          <Button
+            type="button"
+            className="w-full h-12 font-medium"
+            onClick={() => navigate(`/reset-password?email=${encodeURIComponent(email)}`)}
+          >
+            I have the code
+          </Button>
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -66,7 +76,7 @@ export default function ForgotPassword() {
                 Sending...
               </>
             ) : (
-              "Send reset link"
+              "Send reset code"
             )}
           </Button>
         </form>

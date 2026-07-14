@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { CheckSquare, Calendar, FileText, Receipt, User, Building2 } from 'lucide-react';
 
@@ -319,7 +319,7 @@ export default function ClientFormDialog({
           <Section title={pt ? 'Detalhes do Cliente' : 'Client Details'}>
             <TwoCol>
               <Field label={pt ? 'Estado no CRM' : 'Pipeline Stage'}>
-                <select value={formData.pipeline_stage || 'lead'} onChange={e => set('pipeline_stage', e.target.value)} style={selectStyle}>
+                <select value={formData.pipeline_stage || 'contacted'} onChange={e => set('pipeline_stage', e.target.value)} style={selectStyle}>
                   {PIPELINE_STAGES.map(s => <option key={s.value} value={s.value}>{pt ? s.label_pt : s.label_en}</option>)}
                 </select>
               </Field>

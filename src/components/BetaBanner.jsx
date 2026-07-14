@@ -1,4 +1,3 @@
-import React from 'react';
 import { AlertCircle, Lock, Info, Calendar, Zap, Link2, Users, Bot } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 

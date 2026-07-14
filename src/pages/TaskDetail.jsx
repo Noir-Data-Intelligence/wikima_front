@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useLanguage } from '@/components/LanguageContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
 import {
   ArrowLeft, CheckSquare, MessageSquare, Paperclip, Plus, Trash2, 
-  Upload, FileText, Image, Download, ExternalLink, History, User,
-  Calendar, Flag, Edit3
+  Upload, FileText, Image, ExternalLink, History, User
 } from 'lucide-react';
-import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
-import MobileMenuButton from '@/components/dashboard/MobileMenuButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

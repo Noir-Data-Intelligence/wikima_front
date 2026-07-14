@@ -9,32 +9,73 @@ import { http } from './http';
 import { API_BASE_URL } from './config';
 import { setToken as storeToken, clearToken } from './tokenStore';
 
+// ── /auth/me request coalescing ─────────────────────────────────────────────
+// The app calls me() from many independent places on every page (auth guards,
+// workspace/user contexts, and each data query resolving its workspace id). Left
+// un-coalesced that is 15+ identical requests per page. We cache the resolved
+// user for a short window and share any in-flight request, so a burst of callers
+// collapses to a single network round-trip. Any mutation of the session
+// (login/register/verify-otp/logout/updateMe) invalidates or refreshes it.
+const ME_TTL_MS = 15000;
+let meCache = null; // { user, at }
+let meInflight = null;
+
+function invalidateMe() {
+  meCache = null;
+  meInflight = null;
+}
+
 export const auth = {
-  /** Current authenticated user. */
-  me() {
-    return http.get('/auth/me');
+  /** Current authenticated user (coalesced + briefly cached). */
+  me(force = false) {
+    const now = Date.now();
+    if (!force && meCache && now - meCache.at < ME_TTL_MS) {
+      return Promise.resolve(meCache.user);
+    }
+    if (!force && meInflight) return meInflight;
+
+    meInflight = http
+      .get('/auth/me')
+      .then((user) => {
+        meCache = { user, at: Date.now() };
+        meInflight = null;
+        return user;
+      })
+      .catch((err) => {
+        meInflight = null;
+        throw err;
+      });
+    return meInflight;
   },
 
   /** Patch the current user's profile; returns the updated user. */
-  updateMe(data) {
-    return http.put('/auth/me', data);
+  async updateMe(data) {
+    const user = await http.put('/auth/me', data);
+    // Keep the cache coherent with the write instead of forcing a refetch.
+    if (user) meCache = { user, at: Date.now() };
+    return user;
   },
 
   /** Email + password login (positional args, as used by the UI). */
   async loginViaEmailPassword(email, password) {
     const res = await http.post('/auth/login', { email, password });
     if (res && res.access_token) storeToken(res.access_token);
+    invalidateMe();
     return res;
   },
 
   /** Register a new account. */
-  register(data) {
-    return http.post('/auth/register', data);
+  async register(data) {
+    const res = await http.post('/auth/register', data);
+    invalidateMe();
+    return res;
   },
 
   /** Verify an OTP code; caller stores res.access_token via setToken. */
-  verifyOtp(data) {
-    return http.post('/auth/verify-otp', data);
+  async verifyOtp(data) {
+    const res = await http.post('/auth/verify-otp', data);
+    invalidateMe();
+    return res;
   },
 
   /** Resend the OTP to an email. */
@@ -55,6 +96,7 @@ export const auth = {
   /** Persist an access token explicitly. */
   setToken(token) {
     storeToken(token);
+    invalidateMe();
   },
 
   /** Redirect the browser to the app login page, preserving where to return. */
@@ -72,6 +114,7 @@ export const auth = {
   /** Clear the session; optionally redirect afterwards. */
   logout(redirectUrl) {
     clearToken();
+    invalidateMe();
     if (redirectUrl) {
       window.location.href = redirectUrl;
     }

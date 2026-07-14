@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '@/api/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,16 +35,20 @@ function FieldRow({ children }) {
 
 export default function CompanyProfileTab({ workspace, language }) {
   const pt = language === 'pt';
-  const [info, setInfo] = useState(workspace?.company_info || {});
+  // Backend keeps everything base44 stored as loose workspace fields inside the
+  // jsonb `settings` column: settings.company_info, settings.invoice_prefix, ...
+  const [info, setInfo] = useState(workspace?.settings?.company_info || workspace?.company_info || {});
   const [settings, setSettings] = useState(workspace?.settings || {});
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
-  const [invoicePrefix, setInvoicePrefix] = useState(workspace?.invoice_prefix || 'INV');
-  const [receiptPrefix, setReceiptPrefix] = useState(workspace?.receipt_prefix || 'REC');
+  const [invoicePrefix, setInvoicePrefix] = useState(
+    workspace?.settings?.invoice_prefix || workspace?.invoice_prefix || 'INV');
+  const [receiptPrefix, setReceiptPrefix] = useState(
+    workspace?.settings?.receipt_prefix || workspace?.receipt_prefix || 'REC');
 
   useEffect(() => {
-    setInfo(workspace?.company_info || {});
+    setInfo(workspace?.settings?.company_info || workspace?.company_info || {});
     setSettings(workspace?.settings || {});
   }, [workspace?.id]);
 
@@ -69,10 +73,12 @@ export default function CompanyProfileTab({ workspace, language }) {
     setSaving(true);
     try {
       await api.entities.Workspace.update(workspace.id, {
-        company_info: info,
-        settings,
-        invoice_prefix: invoicePrefix,
-        receipt_prefix: receiptPrefix,
+        settings: {
+          ...settings,
+          company_info: info,
+          invoice_prefix: invoicePrefix,
+          receipt_prefix: receiptPrefix,
+        },
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);

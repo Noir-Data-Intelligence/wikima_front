@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
 import { useLanguage } from '@/components/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import {
-  Plus, Users, CheckSquare, Clock, Search,
-  AlertTriangle, MoreHorizontal, Mail, Calendar,
-  Activity, UserCheck, UserX, Send, RefreshCw, X,
+  Plus, Users, CheckSquare, Search,
+  AlertTriangle, MoreHorizontal,
+  Activity, UserCheck, X,
   ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -18,8 +17,6 @@ import { createPageUrl } from '@/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { enUS } from 'date-fns/locale/en-US';
-import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
-import MobileMenuButton from '@/components/dashboard/MobileMenuButton';
 import TeamMemberDialog from '@/components/team/TeamMemberDialog';
 import TeamTaskDialog from '@/components/team/TeamTaskDialog';
 import AccessGuard from '@/components/AccessGuard';

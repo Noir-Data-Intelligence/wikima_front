@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../components/LanguageContext';
@@ -162,54 +162,55 @@ export default function Onboarding() {
         ? (formData.companyName || (pt ? 'A minha empresa' : 'My Company'))
         : (user.full_name ? `${user.full_name}'s Workspace` : (pt ? 'O meu espaço' : 'My Workspace'));
 
+      // Backend contract (POST /workspace): { name, type: 'personal' | 'business',
+      // logo_url, settings }. The owner membership is created automatically by the
+      // backend — creating it here would be rejected (owner rows are immutable).
+      // Everything base44 kept as loose workspace fields now lives inside `settings`.
       const workspace = await api.entities.Workspace.create({
         name: workspaceName,
-        type: isCompany ? 'company' : 'personal',
-        business_tier: 'one',
-        owner_email: user.email,
-        company_info: isCompany ? {
-          company_name: formData.companyName,
-          entity_type: formData.companyType,
-          business_sector: formData.businessSector,
-          team_size: formData.teamSize,
-          logo_url: formData.logoUrl,
-          recommended_modules: getRecommendedModules(formData.businessSector),
-        } : null,
-        settings: { currency: formData.currency, timezone: 'Europe/Lisbon', language: lang },
-        plan: 'business',
-        status: 'active'
+        type: isCompany ? 'business' : 'personal',
+        logo_url: formData.logoUrl || undefined,
+        settings: {
+          currency: formData.currency,
+          timezone: 'Europe/Lisbon',
+          language: lang,
+          country: formData.country || null,
+          company_info: isCompany ? {
+            company_name: formData.companyName,
+            entity_type: formData.companyType,
+            business_sector: formData.businessSector,
+            team_size: formData.teamSize,
+            logo_url: formData.logoUrl,
+            recommended_modules: getRecommendedModules(formData.businessSector),
+          } : null,
+          onboarding: {
+            profile: formData.profile,
+            activity_type: formData.activityType || null,
+            user_role: formData.userRole || null,
+            team_size: formData.teamSize || null,
+            business_sector: formData.businessSector || null,
+          },
+        },
       });
 
-      await api.entities.WorkspaceMember.create({
-        workspace_id: workspace.id,
-        user_email: user.email,
-        role: 'owner',
-        status: 'active',
-        joined_date: new Date().toISOString(),
-        permissions: {
-          can_manage_tasks: true, can_manage_clients: true, can_manage_documents: true,
-          can_manage_invoices: true, can_view_financials: true, can_manage_members: true,
-        }
-      });
+      // OnboardingData is an M3 backend resource — best-effort until it exists.
+      try {
+        await api.entities.OnboardingData.create({
+          workspace_id: workspace.id,
+          user_type: formData.profile,
+          completed: true,
+        });
+      } catch {
+        /* resource not available yet */
+      }
 
-      await api.entities.OnboardingData.create({
-        workspace_id: workspace.id,
-        user_type: formData.profile,
-        completed: true,
-      });
-
+      // Only fields the backend persists on PUT /auth/me (unknown fields are dropped).
       await api.auth.updateMe({
         current_workspace_id: workspace.id,
         default_workspace_id: workspace.id,
         onboarding_completed: true,
-        country: formData.country,
-        preferred_currency: formData.currency,
+        currency: formData.currency,
         user_profile: formData.profile,
-        activity_type: formData.activityType || null,
-        user_role: formData.userRole || null,
-        team_size: formData.teamSize || null,
-        business_sector: formData.businessSector || null,
-        show_guided_tour: true,
       });
 
       setOnboardingCompleted(true);

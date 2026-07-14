@@ -9,8 +9,6 @@ import {
   CheckSquare, Calendar, Receipt, Users, AlertCircle,
   ArrowRight, TrendingUp, Wallet, Lightbulb, Activity, FolderOpen
 } from 'lucide-react';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import WikimaAI from '../components/dashboard/WikimaAI';
 import GuidedTour from '../components/onboarding/GuidedTour';
 import DashboardQuickActions from '../components/dashboard/DashboardQuickActions';

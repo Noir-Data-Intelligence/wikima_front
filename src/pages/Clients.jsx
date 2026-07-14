@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { useDemoMode } from '../components/DemoModeContext';
 import { api } from '@/api/client';
@@ -6,17 +6,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
-  Users, Plus, Eye, Search, Mail, Phone, Building2,
-  FileText, CheckSquare, Receipt, ArrowRight, Calendar,
+  Users, Plus, Eye, Search, Mail, Building2, CheckSquare, Receipt, Calendar,
   LayoutList, Kanban, MoreVertical, Pencil, Trash2, Euro,
-  Clock, Star, TrendingUp, Archive, Zap
+  Clock, Star, TrendingUp, Archive
 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 import { createPageUrl } from '../utils';
 import { Link, useNavigate } from 'react-router-dom';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import ClientPipelineView from '../components/clients/ClientPipelineView';
 import ClientSummaryCards from '../components/clients/ClientSummaryCards';
 import ClientFormDialog from '../components/clients/ClientFormDialog';

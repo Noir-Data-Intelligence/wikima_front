@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '../../components/LanguageContext';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/api/client';
-import DashboardSidebar from '../../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../../components/dashboard/MobileMenuButton';
 import { ClipboardList, Loader2, Search } from 'lucide-react';
 
 export default function AuditLogs() {

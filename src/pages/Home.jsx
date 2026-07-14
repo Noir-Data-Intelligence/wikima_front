@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../utils';
 import { api } from '@/api/client';
@@ -15,14 +15,13 @@ export default function Home() {
   const checkAuthAndRedirect = async () => {
     try {
       const user = await api.auth.me();
-      
+
       if (user) {
-        // User is authenticated - check if they have a workspace
-        const memberRecords = await api.entities.WorkspaceMember.filter({ 
-          user_email: user.email 
-        });
-        
-        if (memberRecords.length === 0) {
+        // User is authenticated - check if they have a workspace.
+        // GET /workspace already returns only the caller's workspaces.
+        const workspaces = await api.entities.Workspace.list();
+
+        if (!workspaces || workspaces.length === 0) {
           // Has account but no workspace - go to onboarding
           navigate(createPageUrl('Onboarding'));
         } else {

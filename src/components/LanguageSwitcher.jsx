@@ -1,4 +1,3 @@
-import React from 'react';
 import { useLanguage } from './LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';

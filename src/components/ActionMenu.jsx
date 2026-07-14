@@ -1,4 +1,3 @@
-import React from 'react';
 import { Pencil, Trash2, Copy, Archive, Calendar } from 'lucide-react';
 import {
   DropdownMenu,

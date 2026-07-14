@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 import { useLanguage } from '../LanguageContext';
 import { useUserType } from '../UserTypeContext';
 import {
   LayoutDashboard, CheckSquare, Users, FileText, Receipt,
-  MessageSquare, MessageCircle, BarChart3, Settings, Wallet, X,
+  MessageSquare, MessageCircle, Settings, Wallet, X,
   Briefcase, Building2, FileCheck, Calendar, Package, DollarSign,
   ChevronDown, UserCircle2, TrendingUp, MessageSquarePlus,
   BarChart2, CreditCard, Zap, ClipboardList, Activity, Shield, Star, FolderKanban

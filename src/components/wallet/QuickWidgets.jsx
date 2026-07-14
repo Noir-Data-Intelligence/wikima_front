@@ -1,5 +1,3 @@
-import React from 'react';
-import { Target, TrendingDown, Calendar } from 'lucide-react';
 
 const EXPENSE_CAT_EMOJI = {
   Food:'🥗', Transport:'🚗', Family:'👨‍👩‍👧', Health:'❤️', Shopping:'🛍️',

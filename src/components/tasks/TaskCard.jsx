@@ -1,7 +1,4 @@
-import React from 'react';
-import { useLanguage } from '../../components/LanguageContext';
-import { Badge } from '@/components/ui/badge';
-import { CheckSquare, Clock, AlertCircle, Calendar, UserCircle2 } from 'lucide-react';
+import { CheckSquare, Calendar } from 'lucide-react';
 
 const PRIORITY_COLORS = {
   low: 'bg-green-500/20 text-green-400 border-green-500/30',

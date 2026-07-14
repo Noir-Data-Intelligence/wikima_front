@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import {
-  ArrowRight, Clock, ShieldCheck, Sparkles, CheckSquare, Users,
+  ArrowRight, Sparkles, CheckSquare, Users,
   FileText, Wallet, Calendar, Receipt, Check, Star, Zap, LayoutDashboard,
   TrendingUp, Quote,
 } from 'lucide-react';

@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { X, Sparkles, TrendingUp, Heart } from 'lucide-react';
+import { X, Sparkles, Heart } from 'lucide-react';
 
 const FEELING_LABELS = {
   necessary:  { pt: 'Necessário',   en: 'Necessary',   color: 'text-blue-400' },

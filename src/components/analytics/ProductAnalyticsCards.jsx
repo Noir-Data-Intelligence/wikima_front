@@ -1,5 +1,4 @@
-import React from 'react';
-import { Users, UserPlus, TrendingUp, CheckCircle2, XCircle, Star, MessageSquarePlus, Briefcase, FileText, Receipt, Package } from 'lucide-react';
+import { Users, UserPlus, TrendingUp, CheckCircle2, XCircle, Star, MessageSquarePlus, FileText, Receipt } from 'lucide-react';
 
 const LABELS = {
   pt: {

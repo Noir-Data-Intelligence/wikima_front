@@ -16,7 +16,8 @@ import { UserTypeProvider } from '@/components/UserTypeContext';
 // falls back to the current workspace type for legacy accounts.
 function deriveProfile(user, workspace) {
   if (user?.user_profile) return user.user_profile; // 'personal' | 'professional' | 'company'
-  if (workspace?.type === 'company') return 'company';
+  // Backend workspace types are 'personal' | 'business' ('company' kept for mock data).
+  if (workspace?.type === 'business' || workspace?.type === 'company') return 'company';
   if (workspace?.type === 'personal') return 'personal';
   return 'professional';
 }

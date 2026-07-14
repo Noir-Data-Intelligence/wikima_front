@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { X, ChevronLeft, Home, Utensils, Car, Heart, Briefcase, GraduationCap, PiggyBank, TrendingUp, Banknote, ShoppingBag, Phone, Tv, Zap, Gift, DollarSign, ArrowDownLeft, ArrowUpRight, Users, BookOpen, Baby, Stethoscope, Coffee, Plane, Shirt, Fuel } from 'lucide-react';
+import { X, Home, Utensils, Car, Heart, Briefcase, PiggyBank, TrendingUp, Banknote, ShoppingBag, Zap, Gift, DollarSign, ArrowDownLeft, ArrowUpRight, Users, Coffee } from 'lucide-react';
 import { KAKEBO_CATEGORIES, INCOME_CATEGORIES, FEELINGS } from './KakeboCategories';
 
 // Category groups for organized display

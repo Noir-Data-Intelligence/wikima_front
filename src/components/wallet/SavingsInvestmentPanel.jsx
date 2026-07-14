@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { KAKEBO_CATEGORIES } from './KakeboCategories';
+import { useState } from 'react';
 
 function Ring({ pct = 0, size = 48, stroke = 4, color = '#34d399' }) {
   const r = (size - stroke) / 2;

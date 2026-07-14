@@ -74,7 +74,7 @@ function clearPersona() {
 const mockWorkspace = {
   id: 'mock-ws-1',
   name: 'WiKima Demo',
-  type: 'company',
+  type: 'business', // matches the backend enum: 'personal' | 'business'
   created_date: new Date().toISOString(),
 };
 

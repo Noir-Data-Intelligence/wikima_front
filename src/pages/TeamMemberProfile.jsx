@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
 import { useLanguage } from '@/components/LanguageContext';
 import { Button } from '@/components/ui/button';
 import {
   ArrowLeft, Edit, CheckSquare, Calendar, FileText, Activity,
-  Shield, Clock, AlertTriangle, CheckCircle2, Mail, Phone,
+  Shield, AlertTriangle, CheckCircle2, Mail, Phone,
   Building2, User, BarChart3, PauseCircle, PlayCircle, Check, X
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -13,8 +13,6 @@ import { createPageUrl } from '@/utils';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { enUS } from 'date-fns/locale/en-US';
-import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
-import MobileMenuButton from '@/components/dashboard/MobileMenuButton';
 import TeamMemberDialog from '@/components/team/TeamMemberDialog';
 import TeamTaskDialog from '@/components/team/TeamTaskDialog';
 import { MemberAvatar, AccessRoleBadge } from './Team';

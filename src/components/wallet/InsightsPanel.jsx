@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { KAKEBO_CATEGORIES } from './KakeboCategories';
 
 export default function InsightsPanel({

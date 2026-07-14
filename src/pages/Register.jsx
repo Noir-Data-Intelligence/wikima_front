@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { Loader2, Mail, Lock, UserPlus, ShieldCheck } from 'lucide-react';
+import { Loader2, Mail, Lock, User, UserPlus, ShieldCheck } from 'lucide-react';
 
 import { api } from '@/api/client';
 import AuthLayout from '@/components/AuthLayout';
@@ -23,8 +23,10 @@ export default function Register() {
 
   const registerSchema = z
     .object({
+      fullName: z.string().min(2, t('auth_err_full_name', 'Enter your name')),
       email: z.string().email(t('auth_err_email', 'Enter a valid email')),
-      password: z.string().min(6, t('auth_err_password_min', 'At least 6 characters')),
+      // Backend enforces a minimum of 8 characters (RegisterCommandValidator).
+      password: z.string().min(8, t('auth_err_password_min', 'At least 8 characters')),
       confirmPassword: z.string(),
     })
     .refine((d) => d.password === d.confirmPassword, {
@@ -38,16 +40,24 @@ export default function Register() {
 
   const registerForm = useForm({
     resolver: zodResolver(registerSchema),
-    defaultValues: { email: '', password: '', confirmPassword: '' },
+    defaultValues: { fullName: '', email: '', password: '', confirmPassword: '' },
   });
   const otpForm = useForm({ resolver: zodResolver(otpSchema), defaultValues: { otpCode: '' } });
 
-  const onRegister = async ({ email: em, password }) => {
+  const onRegister = async ({ fullName, email: em, password }) => {
     setError('');
     try {
-      await api.auth.register({ email: em, password });
-      setEmail(em);
-      setStep('otp');
+      // Backend contract: { email, password, full_name } →
+      // { requires_otp?, access_token?, user? }. The token is only present when
+      // OTP verification is disabled; otherwise it comes back from verify-otp.
+      const res = await api.auth.register({ email: em, password, full_name: fullName });
+      if (res?.requires_otp) {
+        setEmail(em);
+        setStep('otp');
+        return;
+      }
+      api.auth.setToken(res.access_token);
+      window.location.href = '/onboarding';
     } catch (err) {
       setError(err.message || t('auth_err_register', 'Could not create account'));
     }
@@ -56,7 +66,8 @@ export default function Register() {
   const onVerify = async ({ otpCode }) => {
     setError('');
     try {
-      const res = await api.auth.verifyOtp({ email, otpCode });
+      // Backend expects { email, code }.
+      const res = await api.auth.verifyOtp({ email, code: otpCode });
       api.auth.setToken(res.access_token);
       window.location.href = '/onboarding';
     } catch (err) {
@@ -94,6 +105,22 @@ export default function Register() {
               <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">
                 <FormField
                   control={registerForm.control}
+                  name="fullName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('auth_full_name', 'Full name')}</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                          <Input type="text" autoComplete="name" autoFocus placeholder={t('auth_full_name_ph', 'Your name')} className="h-11 pl-10" {...field} />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={registerForm.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
@@ -101,7 +128,7 @@ export default function Register() {
                       <FormControl>
                         <div className="relative">
                           <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                          <Input type="email" autoComplete="email" autoFocus placeholder="you@example.com" className="h-11 pl-10" {...field} />
+                          <Input type="email" autoComplete="email" placeholder="you@example.com" className="h-11 pl-10" {...field} />
                         </div>
                       </FormControl>
                       <FormMessage />

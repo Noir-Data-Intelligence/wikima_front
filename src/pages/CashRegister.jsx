@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { api } from '@/api/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLanguage } from '../components/LanguageContext';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import OpenCashDialog from '../components/cashregister/OpenCashDialog';
 import CloseCashDialog from '../components/cashregister/CloseCashDialog';
 import CashEntryDialog from '../components/cashregister/CashEntryDialog';
 import AccessGuard from '../components/AccessGuard';
 import { Button } from '@/components/ui/button';
 import {
-  Wallet, LockOpen, Lock, Plus, ArrowUpCircle, ArrowDownCircle,
+  Wallet, LockOpen, Lock, ArrowUpCircle, ArrowDownCircle,
   TrendingUp, TrendingDown, CalendarDays, Clock, User, AlertTriangle
 } from 'lucide-react';
 import { format } from 'date-fns';

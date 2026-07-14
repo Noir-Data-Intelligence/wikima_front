@@ -1,7 +1,10 @@
 import './App.css'
 import '@/lib/i18n'
 import { ThemeProvider } from 'next-themes'
-import { Toaster } from "@/components/ui/toaster"
+// Every page calls `toast` from sonner (31 call sites) — the mounted Toaster MUST be the
+// sonner one (@/components/ui/sonner), not the shadcn/radix toaster, or every success/
+// error confirmation is a silent no-op.
+import { Toaster } from "@/components/ui/sonner"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import NavigationTracker from '@/lib/NavigationTracker'

@@ -1,5 +1,3 @@
-import React from 'react';
-import { Lightbulb } from 'lucide-react';
 import CompanyOnboardingCards from './CompanyOnboardingCards';
 
 export default function SmartInsights({ data, sector, language, isCompany = false }) {

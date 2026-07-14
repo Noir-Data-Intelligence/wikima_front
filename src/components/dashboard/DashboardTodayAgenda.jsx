@@ -1,8 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, Clock, MapPin, User, ChevronRight, Plus } from 'lucide-react';
+import { Calendar, MapPin, User, ChevronRight, Plus } from 'lucide-react';
 
 export default function DashboardTodayAgenda({ events, tasks, language }) {
   const pt = language === 'pt';

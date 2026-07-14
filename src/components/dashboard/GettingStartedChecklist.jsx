@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 import {
   CheckCircle2, Circle, ChevronDown, ChevronUp, X,
-  Sparkles, Trophy, Zap, Star
+  Sparkles, Trophy, Star
 } from 'lucide-react';
 
 // ─── Checklist definitions per profile ───────────────────────────────────────

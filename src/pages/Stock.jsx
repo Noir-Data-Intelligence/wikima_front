@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { api } from '@/api/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLanguage } from '../components/LanguageContext';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import ProductDialog from '../components/stock/ProductDialog';
-import { Package, Plus, AlertTriangle, Search, Edit, Minus, AlertCircle, Filter, TrendingUp, DollarSign, PackageOpen } from 'lucide-react';
+import { Package, Plus, AlertTriangle, Search, Edit, Minus, AlertCircle, DollarSign, PackageOpen } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   Dialog,

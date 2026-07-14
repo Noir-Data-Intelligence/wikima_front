@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Search, FileText, ExternalLink } from 'lucide-react';
+import { Search, FileText } from 'lucide-react';
 
 export default function ExpenseHistory({ expenses, language }) {
   const [search, setSearch] = useState('');

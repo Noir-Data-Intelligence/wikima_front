@@ -1,4 +1,3 @@
-import React from 'react';
 import { Menu, X } from 'lucide-react';
 
 export default function MobileMenuButton({ onToggle, isOpen = false }) {

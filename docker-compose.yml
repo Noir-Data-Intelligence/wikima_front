@@ -1,0 +1,23 @@
+# Local convenience wrapper around the production Dockerfile — lets you test
+# the nginx-served build with `docker compose up -d --build` instead of manual
+# `docker build`/`docker run`. Not used by DevOps in production (see Dockerfile
+# + nginx/default.conf.template); joins the `back` stack's existing network so
+# /api reaches that backend.
+
+services:
+  front:
+    build:
+      context: .
+      args:
+        VITE_MOCK_AUTH: "false"
+    ports:
+      - "8090:80"
+    environment:
+      API_UPSTREAM: http://api:8080
+    networks:
+      - back-net
+
+networks:
+  back-net:
+    external: true
+    name: back_wikima-net

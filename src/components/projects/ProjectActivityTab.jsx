@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/api/client';
 import { format, isToday, isYesterday, isThisWeek, parseISO } from 'date-fns';
 import { pt as ptLocale } from 'date-fns/locale/pt';
 import { enUS } from 'date-fns/locale/en-US';
 import {
-  FolderOpen, CheckSquare, Users, FileText, Receipt,
+  FolderOpen, CheckSquare, FileText, Receipt,
   Calendar, DollarSign, StickyNote, User, Activity,
   UserPlus, UserMinus, Upload, Trash2, Edit, Tag
 } from 'lucide-react';

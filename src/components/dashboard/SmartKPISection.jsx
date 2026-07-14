@@ -1,10 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
   TrendingUp, Users, CheckSquare, Receipt, Package, Calendar,
-  DollarSign, AlertTriangle, Briefcase, Home, ClipboardList,
-  UserCheck, ShoppingCart, Building2
+  DollarSign, AlertTriangle, Briefcase, ClipboardList, ShoppingCart, Building2
 } from 'lucide-react';
 
 // ─── Sector KPI definitions ───────────────────────────────────────────────────

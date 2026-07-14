@@ -1,6 +1,5 @@
-import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, AlertCircle, CheckCircle, Sparkles } from 'lucide-react';
+import { TrendingUp, AlertCircle, CheckCircle, Sparkles } from 'lucide-react';
 
 export default function SmartInsights({ transactions, language }) {
   const insights = [];

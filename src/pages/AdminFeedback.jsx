@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { api } from '@/api/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import {
   MessageSquarePlus, Bug, Lightbulb, TrendingUp, Star,
-  Filter, Download, ChevronDown, Eye, X, Check, Loader2
+  Filter, Download, Eye, X, Check, Loader2
 } from 'lucide-react';
 
 const CATEGORY_META = {

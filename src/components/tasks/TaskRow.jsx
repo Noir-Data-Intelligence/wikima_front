@@ -1,7 +1,4 @@
-import React from 'react';
-import { useLanguage } from '../../components/LanguageContext';
-import { Badge } from '@/components/ui/badge';
-import { CheckSquare, Clock, AlertCircle, Calendar, UserCircle2 } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 const STATUS_COLORS = {
   todo: 'bg-slate-500/20 text-muted-foreground border-slate-500/30',
@@ -18,7 +15,7 @@ const PRIORITY_COLORS = {
   urgent: 'bg-rose-500/20 text-rose-400 border-rose-500/30'
 };
 
-export default function TaskRow({ task, onEdit, onStatusChange, language, showHistory, userType }) {
+export default function TaskRow({ task, onEdit, onStatusChange, language, userType }) {
   const pt = language === 'pt';
   const isIndividual = userType === 'individual';
   
@@ -46,9 +43,9 @@ export default function TaskRow({ task, onEdit, onStatusChange, language, showHi
   const isOverBudget = timeProgress > 100;
 
   return (
-    <div className="group grid grid-cols-12 gap-2 px-3 py-2 hover:bg-background transition-all cursor-pointer" onClick={() => onEdit(task)}>
+    <div className="group grid grid-cols-12 gap-3 px-4 py-2 hover:bg-background transition-all cursor-pointer" onClick={() => onEdit(task)}>
       {/* Task Title */}
-      <div className={`${userType === 'company' ? 'col-span-2' : 'col-span-3'} flex items-center gap-2 min-w-0`}>
+      <div className="col-span-3 flex items-center gap-2 min-w-0">
         <div 
           className={`w-2 h-2 rounded-full flex-shrink-0 cursor-pointer ${
             task.status === 'completed' ? 'bg-green-400' :
@@ -76,7 +73,7 @@ export default function TaskRow({ task, onEdit, onStatusChange, language, showHi
 
       {/* Client */}
       {!isIndividual && (
-        <div className={`${userType === 'company' ? 'col-span-2' : 'col-span-3'} flex items-center`}>
+        <div className="col-span-2 flex items-center">
           <span className="text-xs text-muted-foreground truncate">{task.client_name || '-'}</span>
         </div>
       )}
@@ -111,7 +108,7 @@ export default function TaskRow({ task, onEdit, onStatusChange, language, showHi
       )}
 
       {/* Status */}
-      <div className={`${userType === 'company' ? 'col-span-1' : 'col-span-2'} flex items-center`}>
+      <div className="col-span-2 flex items-center">
         <select
           value={task.status}
           onChange={(e) => {

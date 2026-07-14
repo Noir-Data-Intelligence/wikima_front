@@ -1,9 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { createPageUrl } from '../../utils';
 import {
-  CheckSquare, Calendar, Receipt, Users, AlertCircle,
-  CheckCircle2, Zap, ArrowRight, Wallet, Clock
+  CheckCircle2, ArrowRight, Clock
 } from 'lucide-react';
 
 // ─── Urgency state ─────────────────────────────────────────────────────────────

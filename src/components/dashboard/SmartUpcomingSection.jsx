@@ -1,8 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { CheckSquare, Calendar, Clock, AlertCircle, ArrowRight } from 'lucide-react';
-import { formatDistanceToNow, isToday, isTomorrow, format } from 'date-fns';
+import { formatDistanceToNow, isToday, isTomorrow } from 'date-fns';
 import { pt as ptLocale } from 'date-fns/locale/pt';
 import { enGB } from 'date-fns/locale/en-GB';
 

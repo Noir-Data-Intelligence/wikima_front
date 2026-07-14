@@ -10,8 +10,6 @@ import {
   Smile, Paperclip, Mic, MoreVertical, Phone, Video, Info,
   CheckCheck, Check, Hash, ArrowRight
 } from 'lucide-react';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import AccessGuard from '../components/AccessGuard';
 import MessagesContextPanel from '../components/messages/MessagesContextPanel';
 import MessagesWelcome from '../components/messages/MessagesWelcome';

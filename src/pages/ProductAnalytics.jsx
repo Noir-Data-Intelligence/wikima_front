@@ -1,14 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '../components/LanguageContext';
 import { api } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import ProductAnalyticsCards from '../components/analytics/ProductAnalyticsCards';
 import ProductAnalyticsCharts from '../components/analytics/ProductAnalyticsCharts';
-import { Download, BarChart3, Loader2, RefreshCw, Calendar } from 'lucide-react';
+import { Download, BarChart3, Loader2, RefreshCw } from 'lucide-react';
 
 const T = {
   pt: {

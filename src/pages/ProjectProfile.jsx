@@ -10,14 +10,11 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   ArrowLeft, Edit, Plus, CheckSquare, Users, FileText, Receipt,
-  Calendar, Activity, StickyNote, User, Tag, DollarSign, Clock,
-  AlertTriangle, ChevronRight, UploadCloud, Trash2, X, FolderOpen, FileCheck
+  Calendar, Activity, StickyNote, User, ChevronRight, UploadCloud, Trash2, X, FolderOpen, FileCheck
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
-import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
-import MobileMenuButton from '@/components/dashboard/MobileMenuButton';
 import ProjectFormDialog from '@/components/projects/ProjectFormDialog';
 import ReceiptDialog from '@/components/receipts/ReceiptDialog';
 import { useCompanyProfile } from '@/hooks/useCompanyProfile';

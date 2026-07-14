@@ -1,17 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '@/components/LanguageContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
 import { Plus, Search, Briefcase, CheckCircle, Clock, AlertCircle, User, Building } from 'lucide-react';
-import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
-import MobileMenuButton from '@/components/dashboard/MobileMenuButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from 'sonner';
 import AssignmentFormDialog from '@/components/assignments/AssignmentFormDialog';
 
 const STATUS_CFG = {
@@ -82,11 +77,17 @@ export default function Assignments() {
 
   const createMutation = useMutation({
     mutationFn: async (data) => {
-      return api.entities.Assignment.create(data);
+      const wsId = await getWsId();
+      return api.entities.Assignment.create({ ...data, workspace_id: wsId });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['assignments']);
+      queryClient.invalidateQueries({ queryKey: ['assignments'] });
       setShowFormDialog(false);
+      toast.success(pt ? '✅ Atribuição criada!' : '✅ Assignment created!');
+    },
+    onError: (error) => {
+      console.error('Assignment create failed:', error);
+      toast.error(error?.message || (pt ? 'Erro ao criar atribuição' : 'Failed to create assignment'));
     }
   });
 
@@ -95,8 +96,14 @@ export default function Assignments() {
       return api.entities.Assignment.update(id, data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['assignments']);
+      queryClient.invalidateQueries({ queryKey: ['assignments'] });
       setEditingAssignment(null);
+      setShowFormDialog(false);
+      toast.success(pt ? '✅ Atribuição atualizada!' : '✅ Assignment updated!');
+    },
+    onError: (error) => {
+      console.error('Assignment update failed:', error);
+      toast.error(error?.message || (pt ? 'Erro ao atualizar atribuição' : 'Failed to update assignment'));
     }
   });
 

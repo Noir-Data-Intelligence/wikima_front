@@ -1,9 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 import {
-  UserPlus, FilePlus, CheckSquare, Upload, Plus,
-  Wallet, Target, PiggyBank, BarChart3, Calendar, Users, Receipt
+  UserPlus, FilePlus, CheckSquare, Plus,
+  Wallet, PiggyBank, BarChart3, Calendar, Users
 } from 'lucide-react';
 
 // ─── Profile-specific action sets ────────────────────────────────────────────

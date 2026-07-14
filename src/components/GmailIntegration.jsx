@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
 import { api } from '@/api/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Mail, CheckCircle, XCircle, RefreshCw, Loader2 } from 'lucide-react';
+import { Mail, CheckCircle, RefreshCw, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function GmailIntegration() {

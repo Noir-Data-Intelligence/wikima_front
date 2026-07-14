@@ -11,14 +11,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { Upload, Search, FileText, X, Download, ExternalLink, CheckCircle2, Sparkles, Lock, Cloud, FolderOpen, ArrowRight, Filter } from 'lucide-react';
+import { Upload, Search, FileText, X, ExternalLink, Sparkles, Lock, FolderOpen, Filter } from 'lucide-react';
 import { createPageUrl } from '../utils';
 import WiKimaTips from '../components/WiKimaTips';
 import { toast } from 'sonner';
-import { BetaNotice } from '../components/BetaBanner';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 
 export default function Documents() {
   const { t, language } = useLanguage();

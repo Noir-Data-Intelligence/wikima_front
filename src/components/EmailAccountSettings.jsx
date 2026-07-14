@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLanguage } from './LanguageContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Mail, RefreshCw, Trash2, AlertCircle, CheckCircle } from 'lucide-react';
+import { Mail, RefreshCw, Trash2 } from 'lucide-react';
 
 export default function EmailAccountSettings() {
   const { language } = useLanguage();

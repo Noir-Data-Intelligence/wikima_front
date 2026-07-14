@@ -1,18 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/api/client';
 import { Button } from '@/components/ui/button';
 import {
-  Plus, Bell, Target, Calendar, CheckCircle2, AlertCircle,
-  Pencil, Trash2, Receipt, Leaf
+  Plus, Bell, Target, Calendar, CheckCircle2, AlertCircle, Receipt, Leaf
 } from 'lucide-react';
 import { toast } from 'sonner';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
 import ActionMenu from '../components/ActionMenu';
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog';
 import { showUndoToast } from '@/utils/showUndoToast';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import SimpleRecordDialog from '../components/wallet/SimpleRecordDialog';
 import PaymentReminderDialog from '../components/wallet/PaymentReminderDialog';
 import SavingsGoalDialog from '../components/wallet/SavingsGoalDialog';

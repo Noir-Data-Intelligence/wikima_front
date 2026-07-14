@@ -1,9 +1,8 @@
-import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Building2, User, Calendar, Briefcase, Tag, X,
-  PhoneCall, Send, MessageSquare, Globe, Plus,
+  PhoneCall, Send, MessageSquare, Globe,
   Receipt, FileText, CheckSquare, Clock, TrendingUp,
   FolderOpen, Activity, AlertCircle, Mail
 } from 'lucide-react';

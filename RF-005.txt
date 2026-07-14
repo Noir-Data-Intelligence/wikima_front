@@ -1,0 +1,25 @@
+RF-005
+
+O sistema deverá suportar:
+
+Clientes
+Projetos
+Tarefas
+Agenda
+Serviços
+Produtos
+Stock
+Mensagens
+Financeiro
+	Faturas
+	Recibos
+	Cash regiters
+	Bancos
+	Carteira pessoal
+	Histórico de transação
+	Reports
+Documentos
+Analytics
+	Catálogo
+	Inventário
+Administração

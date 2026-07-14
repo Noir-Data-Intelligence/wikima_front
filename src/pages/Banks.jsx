@@ -9,11 +9,9 @@ import { Badge } from '@/components/ui/badge';
 import {
   Plus, Search, Building2, FileText, Upload,
   CheckCircle, AlertCircle, Edit, X, ArrowUpRight,
-  ArrowDownRight, Wallet, CreditCard, Filter
+  ArrowDownRight, Wallet
 } from 'lucide-react';
 import { toast } from 'sonner';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import BankAccountDialog from '../components/banks/BankAccountDialog';
 import StatementUploadDialog from '../components/banks/StatementUploadDialog';
 import AccessGuard from '../components/AccessGuard';

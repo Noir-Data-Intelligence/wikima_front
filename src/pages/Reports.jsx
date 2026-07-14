@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { useDemoMode } from '../components/DemoModeContext';
 import { useQuery } from '@tanstack/react-query';
@@ -7,16 +7,13 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-  CheckCircle, Clock, Receipt, TrendingUp, TrendingDown, BarChart3, Calendar,
+import { Receipt, BarChart3, Calendar,
   AlertCircle, Users, FileText, Sparkles, DollarSign, Building2, Briefcase,
   FileCheck, ArrowUpRight, ArrowDownRight, Minus, FileDown, Mail, Printer,
   CheckSquare, Activity, Zap, ShieldCheck, CreditCard, Wallet
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../utils';
 import { useCompanyProfile } from '@/hooks/useCompanyProfile';

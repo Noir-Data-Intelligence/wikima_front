@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../utils';
 import { useLanguage } from '../components/LanguageContext';
@@ -7,8 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import { Building2, Users, Mail, Trash2, Shield, CheckCircle, XCircle } from 'lucide-react';
+import { Building2, Users } from 'lucide-react';
 import ProfileSettingsCard from '../components/profile/ProfileSettingsCard';
 import CompanyProfileTab from '../components/settings/CompanyProfileTab';
 
@@ -40,12 +39,17 @@ export default function WorkspaceSettings() {
       }
 
       // Get workspace
-      const workspaces = await api.entities.Workspace.filter({ id: currentUser.current_workspace_id });
-      if (workspaces.length === 0) {
+      let ws = null;
+      try {
+        ws = await api.entities.Workspace.get(currentUser.current_workspace_id);
+      } catch {
+        ws = null;
+      }
+      if (!ws) {
         navigate(createPageUrl('Onboarding'));
         return;
       }
-      setWorkspace(workspaces[0]);
+      setWorkspace(ws);
 
       // Get current user's role
       const myMembership = await api.entities.WorkspaceMember.filter({
@@ -72,9 +76,10 @@ export default function WorkspaceSettings() {
   const handleSaveWorkspace = async () => {
     try {
       setSavingWorkspace(true);
+      // The backend persists { name, type, logo_url, settings }; company_info
+      // lives inside settings (settings.company_info).
       await api.entities.Workspace.update(workspace.id, {
         name: workspace.name,
-        company_info: workspace.company_info,
         settings: workspace.settings
       });
       alert(language === 'pt' ? 'Guardado com sucesso!' : 'Saved successfully!');
@@ -101,30 +106,32 @@ export default function WorkspaceSettings() {
         return;
       }
 
-      // Create member record
+      // Create member record. Backend contract: { workspace_id, user_email, role }
+      // + flat can_manage_* flags; it decides active vs invited by whether an
+      // account with that email exists (status is not client-controlled).
       await api.entities.WorkspaceMember.create({
         workspace_id: workspace.id,
         user_email: inviteEmail,
         role: inviteRole,
-        status: 'invited',
-        permissions: {
-          can_manage_tasks: true,
-          can_manage_clients: true,
-          can_manage_documents: true,
-          can_manage_invoices: inviteRole !== 'member',
-          can_view_financials: true,
-          can_manage_members: inviteRole === 'owner' || inviteRole === 'admin'
-        }
+        can_manage_tasks: true,
+        can_manage_clients: true,
+        can_manage_invoices: inviteRole !== 'member',
+        can_manage_finances: inviteRole !== 'member'
       });
 
-      // Send invitation email
-      await api.integrations.Core.SendEmail({
-        to: inviteEmail,
-        subject: language === 'pt' ? `Convite para ${workspace.name}` : `Invitation to ${workspace.name}`,
-        body: language === 'pt' 
-          ? `Foi convidado para juntar-se ao espaço de trabalho ${workspace.name} na WiKima.\n\nAceda a https://wikima.com e faça login para começar.`
-          : `You've been invited to join the ${workspace.name} workspace on WiKima.\n\nVisit https://wikima.com and log in to get started.`
-      });
+      // Send invitation email — best-effort: /integrations/email only lands in a
+      // later milestone (M6+); the membership above is already created either way.
+      try {
+        await api.integrations.Core.SendEmail({
+          to: inviteEmail,
+          subject: language === 'pt' ? `Convite para ${workspace.name}` : `Invitation to ${workspace.name}`,
+          body: language === 'pt'
+            ? `Foi convidado para juntar-se ao espaço de trabalho ${workspace.name} na WiKima.\n\nAceda a https://wikima.com e faça login para começar.`
+            : `You've been invited to join the ${workspace.name} workspace on WiKima.\n\nVisit https://wikima.com and log in to get started.`
+        });
+      } catch {
+        /* email integration not available yet */
+      }
 
       alert(language === 'pt' ? 'Convite enviado!' : 'Invitation sent!');
       setInviteEmail('');
@@ -148,16 +155,13 @@ export default function WorkspaceSettings() {
 
   const handleUpdateMemberRole = async (memberId, newRole) => {
     try {
+      // Backend contract: flat can_manage_* flags (no nested permissions object).
       await api.entities.WorkspaceMember.update(memberId, {
         role: newRole,
-        permissions: {
-          can_manage_tasks: true,
-          can_manage_clients: true,
-          can_manage_documents: true,
-          can_manage_invoices: newRole !== 'member',
-          can_view_financials: true,
-          can_manage_members: newRole === 'owner' || newRole === 'admin'
-        }
+        can_manage_tasks: true,
+        can_manage_clients: true,
+        can_manage_invoices: newRole !== 'member',
+        can_manage_finances: newRole !== 'member'
       });
       loadData();
     } catch (error) {
@@ -192,7 +196,7 @@ export default function WorkspaceSettings() {
             </div>
 
             {/* Tabs — only shown for company workspaces */}
-            {workspace?.type === 'company' && (
+            {workspace?.type === 'business' && (
               <div className="flex gap-1 mb-4 p-1 rounded-xl bg-background w-fit">
                 {['general', 'company'].map(tab => (
                   <button
@@ -213,12 +217,12 @@ export default function WorkspaceSettings() {
             )}
 
             {/* Company Profile Tab */}
-            {activeTab === 'company' && workspace?.type === 'company' ? (
+            {activeTab === 'company' && workspace?.type === 'business' ? (
               <CompanyProfileTab workspace={workspace} language={language} />
             ) : (
               <div className="grid gap-6">
                 {/* Profile Settings - Hidden for company workspaces */}
-                {workspace?.type !== 'company' && <ProfileSettingsCard language={language} />}
+                {workspace?.type !== 'business' && <ProfileSettingsCard language={language} />}
 
                 {/* Workspace Info */}
                 <Card className="bg-card border-border">
@@ -272,7 +276,7 @@ export default function WorkspaceSettings() {
                 </Card>
 
                 {/* Team Members Summary - Only for company workspaces */}
-                {workspace?.type === 'company' && (
+                {workspace?.type === 'business' && (
                   <Card className="bg-card border-border">
                     <CardHeader>
                       <CardTitle className="text-foreground flex items-center gap-2">

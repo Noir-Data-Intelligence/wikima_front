@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { api } from '@/api/client';
 import { useUserType } from '../UserTypeContext';
-import { User, Briefcase, Building2, CheckCircle2, ChevronRight, Info } from 'lucide-react';
+import { User, Briefcase, Building2, CheckCircle2, Info } from 'lucide-react';
 
 const PROFILES = [
   {

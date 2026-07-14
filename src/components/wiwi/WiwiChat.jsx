@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { api } from '@/api/client';
 import { usePlanCheck } from '../usePlanCheck';
 import { Button } from '@/components/ui/button';
@@ -8,8 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Sparkles, Send, X, Loader2, Lock } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 import ReactMarkdown from 'react-markdown';
-import { Link } from 'react-router-dom';
-import { createPageUrl } from '../../utils';
 
 export default function WiwiChat({ compact = false, onClose = null }) {
   const { language } = useLanguage();

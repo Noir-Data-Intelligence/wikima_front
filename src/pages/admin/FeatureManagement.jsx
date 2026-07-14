@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '../../components/LanguageContext';
-import DashboardSidebar from '../../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../../components/dashboard/MobileMenuButton';
 import { Zap, ToggleLeft, ToggleRight } from 'lucide-react';
 
 const FEATURES = [

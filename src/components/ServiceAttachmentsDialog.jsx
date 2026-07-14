@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLanguage } from './LanguageContext';
 import { api } from '@/api/client';
 import { Button } from '@/components/ui/button';
@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Upload, X, FileText, Download, Trash2 } from 'lucide-react';
+import { Upload, FileText, Download, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function ServiceAttachmentsDialog({ service, open, onClose, onUpdate }) {

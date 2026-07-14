@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '../../components/LanguageContext';
-import DashboardSidebar from '../../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../../components/dashboard/MobileMenuButton';
-import { Settings, Globe, Bell, Shield, Zap } from 'lucide-react';
+import { Settings, Globe, Bell, Shield } from 'lucide-react';
 
 export default function PlatformSettings() {
   const { user } = useAuth();

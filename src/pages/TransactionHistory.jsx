@@ -1,12 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useLanguage } from '../components/LanguageContext';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/api/client';
-import DashboardSidebar from '../components/dashboard/DashboardSidebar';
-import MobileMenuButton from '../components/dashboard/MobileMenuButton';
-import { ArrowLeft, Receipt, TrendingUp, TrendingDown, Wallet, Filter, Calendar, Plus } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import { createPageUrl } from '../utils';
+import { ArrowLeft, Receipt, TrendingUp, TrendingDown, Wallet, Calendar, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../components/ActionMenu';
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog';
 import SimpleRecordDialog from '../components/wallet/SimpleRecordDialog';

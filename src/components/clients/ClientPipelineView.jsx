@@ -1,9 +1,6 @@
-import React from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useLanguage } from '../LanguageContext';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Plus, Building2, Mail, Calendar, Zap, AlertCircle, Tag, Clock } from 'lucide-react';
+import { Plus, Building2, Calendar, Zap, AlertCircle } from 'lucide-react';
 import { api } from '@/api/client';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';

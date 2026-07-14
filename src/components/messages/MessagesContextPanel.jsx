@@ -1,5 +1,4 @@
-import React from 'react';
-import { CheckSquare, FileText, Calendar, AlertCircle, Building2, Mail, Phone, Tag } from 'lucide-react';
+import { CheckSquare, FileText, Building2, Mail, Phone, Tag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function MessagesContextPanel({ client, tasks, invoices, language }) {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Users, CheckSquare, Receipt, UserPlus, ArrowRight } from 'lucide-react';
 

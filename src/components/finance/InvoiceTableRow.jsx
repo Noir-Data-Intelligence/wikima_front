@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, CheckCircle, Copy, XCircle, Eye, Download, Send, FileCheck } from 'lucide-react';
 
 const statusColors = {

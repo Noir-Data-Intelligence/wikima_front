@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '../LanguageContext';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, X } from 'lucide-react';

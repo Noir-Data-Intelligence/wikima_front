@@ -5,7 +5,6 @@
 // <LanguageProvider> — so the ~75 existing consumers keep working unchanged while
 // pages migrate to useTranslation() directly.
 
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
 

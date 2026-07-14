@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../LanguageContext';
-import { Sparkles, Send, X, CheckCircle2, Users, CheckSquare, Receipt, Wallet, Calendar, Zap, AlertTriangle, TrendingUp, Package, Clock } from 'lucide-react';
+import { Sparkles, Send, X, CheckCircle2, Users, CheckSquare, Receipt, Calendar, Zap, AlertTriangle, TrendingUp, Package } from 'lucide-react';
 import { api } from '@/api/client';
 import { usePersonalPayments } from '../../hooks/usePersonalPayments';
 import { differenceInDays } from 'date-fns';

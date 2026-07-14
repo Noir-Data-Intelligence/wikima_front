@@ -1,4 +1,3 @@
-import React from 'react';
 import { Users, TrendingUp, Bell, Receipt } from 'lucide-react';
 
 export default function ClientSummaryCards({ clients, invoices, language }) {
