@@ -17,6 +17,10 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
+      // Vite rejects requests whose Host header it doesn't recognize (DNS-rebinding
+      // protection) — a Cloudflare quick tunnel's random *.trycloudflare.com hostname
+      // would otherwise be blocked. Scoped to that one suffix, not "allow everything".
+      allowedHosts: ['.trycloudflare.com'],
       // Only proxy when the API base is a same-origin path (starts with '/').
       ...(apiBase.startsWith('/')
         ? {

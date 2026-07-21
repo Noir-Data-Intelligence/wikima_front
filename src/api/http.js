@@ -45,7 +45,10 @@ function toQueryString(params) {
 
 async function parseBody(response) {
   const contentType = response.headers.get('content-type') || '';
-  if (contentType.includes('application/json')) {
+  // Matches both 'application/json' and RFC 7807 'application/problem+json'
+  // (the backend's error responses — ExceptionHandlingMiddleware/ResultExtensions —
+  // use the latter, and its 'message' field would otherwise be silently dropped).
+  if (contentType.includes('json')) {
     try {
       return await response.json();
     } catch {
