@@ -1,0 +1,30 @@
+# Production frontend for a single Azure VM. Differences from docker-compose.yml
+# (the local convenience wrapper): serves on host port 80 (not 8090), restarts
+# automatically, and — like the local version — joins the back stack's network
+# by name so nginx can reach the api container without publishing it publicly.
+#
+# Assumes the back stack was deployed with `docker compose -p back ...` (see
+# ../back/docker-compose.prod.yml), which is what makes the network name below
+# `back_wikima-net` regardless of what directory the repo was cloned into.
+#
+# Usage (see DEPLOY.md for the full walkthrough):
+#   docker compose -p wikima -f docker-compose.prod.yml up -d --build
+
+services:
+  front:
+    build:
+      context: .
+      args:
+        VITE_MOCK_AUTH: "false"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      API_UPSTREAM: http://api:8080
+    networks:
+      - back-net
+
+networks:
+  back-net:
+    external: true
+    name: back_wikima-net
