@@ -50,10 +50,10 @@ export default function InvoiceFormModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="max-w-4xl max-h-[88vh] overflow-y-auto p-0 border-border"
-        style={{ backgroundColor: '#0d1526' }}
+        style={{ backgroundColor: 'hsl(var(--popover))' }}
       >
         {/* Modal Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-3 border-b border-border" style={{ backgroundColor: '#0d1526' }}>
+        <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-3 border-b border-border" style={{ backgroundColor: 'hsl(var(--popover))' }}>
           <div>
             <h2 className="text-sm font-semibold text-foreground tracking-tight">
               {editingInvoice

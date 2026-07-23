@@ -90,8 +90,8 @@ export default function SupportChat({ isOpen, onClose }) {
     <div className="fixed inset-0 z-50 flex items-end justify-end p-4 pointer-events-none">
       <div 
         className="pointer-events-auto rounded-2xl shadow-2xl flex flex-col"
-        style={{ 
-          backgroundColor: '#1c2d5f',
+        style={{
+          backgroundColor: 'hsl(var(--sidebar-background))',
           width: '400px',
           maxWidth: '100vw',
           height: '600px',

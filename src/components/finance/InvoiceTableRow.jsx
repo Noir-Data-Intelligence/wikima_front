@@ -84,7 +84,7 @@ export default function InvoiceTableRow({ invoice, language, statusLabels, onEdi
           {menuOpen && (
             <div
               className="absolute right-0 top-8 z-50 w-44 rounded-lg border border-border py-1 shadow-xl"
-              style={{ backgroundColor: '#0d1a2d' }}
+              style={{ backgroundColor: 'hsl(var(--popover))' }}
             >
               <MenuItem icon={<Eye className="w-3.5 h-3.5" />} label={language === 'pt' ? 'Ver' : 'View'} onClick={() => { onView(invoice); setMenuOpen(false); }} />
               <MenuItem icon={<Pencil className="w-3.5 h-3.5" />} label={language === 'pt' ? 'Editar' : 'Edit'} onClick={() => { onEdit(invoice); setMenuOpen(false); }} />

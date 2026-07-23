@@ -220,7 +220,7 @@ export default function DashboardSidebar({ currentPage, isOpen, onToggle, user }
 
       {/* Sidebar */}
       <aside
-        style={{ backgroundColor: '#1c2d5f', borderColor: 'rgba(255,255,255,0.08)', boxShadow: isOpen ? '4px 0 32px rgba(0,0,0,0.4)' : 'none' }}
+        style={{ backgroundColor: 'hsl(var(--sidebar-background))', borderColor: 'rgba(255,255,255,0.08)', boxShadow: isOpen ? '4px 0 32px rgba(0,0,0,0.4)' : 'none' }}
         className={`fixed top-0 left-0 h-full w-64 border-r z-50 flex flex-col transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}

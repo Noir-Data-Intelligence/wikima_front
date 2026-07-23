@@ -70,7 +70,7 @@ export default function ClientPipelineView({ clients, onAddClient }) {
                     className={`flex-1 rounded-b-xl border border-t-0 p-2 space-y-2 transition-all min-h-[200px] ${
                       snapshot.isDraggingOver
                         ? `border-dashed ${stage.headerColor}`
-                        : 'bg-background border-[#1e2d47]'
+                        : 'bg-background border-border'
                     }`}
                   >
                     {stageClients.map((client, index) => (

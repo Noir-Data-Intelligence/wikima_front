@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 function KPICard({ title, value, subtitle, icon: IconComp, color, link, trend, trendValue }) {
   const Icon = IconComp;
   const content = (
-    <Card className="border transition-all hover:scale-[1.02]" style={{ backgroundColor: '#1e293b', borderColor: `${color}30` }}>
+    <Card className="border transition-all hover:scale-[1.02]" style={{ backgroundColor: 'hsl(var(--card))', borderColor: `${color}30` }}>
       <CardContent className="p-5">
         <div className="flex items-start justify-between mb-3">
           <div className="p-2 rounded-lg" style={{ backgroundColor: `${color}15` }}>

@@ -439,7 +439,7 @@ function TeamTab({ project, allMembers, pt, onUpdate, projectId, workspaceId, on
                 <button key={m.id} onClick={() => addMember(m)}
                   className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-accent/50 transition-all text-left">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-foreground"
-                    style={{ backgroundColor: '#1c2d5f' }}>
+                    style={{ backgroundColor: 'hsl(var(--accent))' }}>
                     {m.full_name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase()}
                   </div>
                   <div>
@@ -810,7 +810,7 @@ function FinanceTab({ workspaceId, projectId, project, pt, clients, language, co
                         className="h-7 text-xs bg-background border-border text-foreground" min="0" step="0.01" />
                     </div>
                     <div className="col-span-2">
-                      <Input value={item.total.toFixed(2)} readOnly className="h-7 text-xs bg-[#060e1e] border-border text-muted-foreground text-right" />
+                      <Input value={item.total.toFixed(2)} readOnly className="h-7 text-xs bg-muted border-border text-muted-foreground text-right" />
                     </div>
                     <div className="col-span-1 flex justify-center">
                       <button type="button" onClick={() => setForm({ ...form, items: form.items.filter((_, i) => i !== idx) })}

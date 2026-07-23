@@ -6,7 +6,7 @@ import { DollarSign, Clock, AlertCircle, Users, TrendingUp, TrendingDown } from 
 function KPICard({ title, value, subtitle, icon: IconComp, color, borderColor, link, trend, trendLabel }) {
   const Icon = IconComp;
   const inner = (
-    <Card className="border transition-all duration-200 hover:scale-[1.02] cursor-pointer" style={{ backgroundColor: '#1e293b', borderColor: borderColor || `${color}25` }}>
+    <Card className="border transition-all duration-200 hover:scale-[1.02] cursor-pointer" style={{ backgroundColor: 'hsl(var(--card))', borderColor: borderColor || `${color}25` }}>
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-2">
           <div className="p-1.5 rounded-lg" style={{ backgroundColor: `${color}15` }}>

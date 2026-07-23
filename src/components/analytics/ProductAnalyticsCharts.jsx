@@ -37,7 +37,7 @@ const LABELS = {
 };
 
 const CHART_TOOLTIP_STYLE = {
-  contentStyle: { backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: '#fff', fontSize: 12 },
+  contentStyle: { backgroundColor: 'hsl(var(--card))', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: '#fff', fontSize: 12 },
   labelStyle: { color: 'rgba(255,255,255,0.5)' }
 };
 

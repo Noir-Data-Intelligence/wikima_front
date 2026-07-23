@@ -465,7 +465,7 @@ export default function WikimaAI({
 
       {/* ── Response card ──────────────────────────────────────── */}
       {(isLoading || response) && (
-        <div className="rounded-xl border border-white/8 bg-[#0f1e38] px-3 py-2.5 relative">
+        <div className="rounded-xl border border-white/8 bg-card px-3 py-2.5 relative">
           {response && !isLoading && (
             <button onClick={() => setResponse(null)} className="absolute top-2 right-2 text-muted-foreground hover:text-muted-foreground">
               <X className="w-3 h-3" />

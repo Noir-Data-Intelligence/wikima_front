@@ -101,7 +101,7 @@ export default function Agenda() {
           ))}
         </div>
         {/* Day cells */}
-        <div className="grid grid-cols-7 divide-x divide-y divide-[#334155]">
+        <div className="grid grid-cols-7 divide-x divide-y divide-border">
           {days.map((day) => {
             const dayEvents = getEventsForDate(day);
             const dayTasks = getTasksForDate(day);
@@ -179,7 +179,7 @@ export default function Agenda() {
 
     return (
       <div className="bg-card rounded-lg border border-border overflow-hidden">
-        <div className="grid grid-cols-7 divide-x divide-[#334155] border-b border-border">
+        <div className="grid grid-cols-7 divide-x divide-border border-b border-border">
           {weekDays.map((day) => {
             const isToday = isSameDay(day, new Date());
             return (
@@ -194,7 +194,7 @@ export default function Agenda() {
             );
           })}
         </div>
-        <div className="grid grid-cols-7 divide-x divide-[#334155]">
+        <div className="grid grid-cols-7 divide-x divide-border">
           {weekDays.map((day) => {
             const dayEvents = getEventsForDate(day);
             const dayTasks = getTasksForDate(day);

@@ -54,7 +54,7 @@ function RowMenu({ receipt, language, onPrint, onEdit, onDelete, onOpenFile }) {
         <MoreHorizontal className="w-4 h-4" />
       </button>
       {open && (
-        <div className="absolute right-0 top-8 z-50 w-44 rounded-lg border border-border py-1 shadow-xl" style={{ backgroundColor: '#0d1a2d' }}>
+        <div className="absolute right-0 top-8 z-50 w-44 rounded-lg border border-border py-1 shadow-xl" style={{ backgroundColor: 'hsl(var(--popover))' }}>
           <MenuItem icon={<Printer className="w-3.5 h-3.5" />} label={language === 'pt' ? 'Ver / PDF' : 'View / PDF'} onClick={() => { onPrint(receipt); setOpen(false); }} />
           <MenuItem icon={<Edit className="w-3.5 h-3.5" />} label={language === 'pt' ? 'Editar' : 'Edit'} onClick={() => { onEdit(receipt); setOpen(false); }} />
           {receipt.file_url && (
@@ -354,7 +354,7 @@ export default function Receipts() {
                   )}
                 </div>
               ) : (
-                <div className="divide-y divide-[#334155]/50">
+                <div className="divide-y divide-border/50">
                   {filtered.map(receipt => (
                     <div key={receipt.id} className="grid grid-cols-12 gap-2 px-4 py-2.5 items-center hover:bg-white/[0.02] transition-colors group">
                       {/* Receipt # */}

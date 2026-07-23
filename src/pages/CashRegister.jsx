@@ -359,7 +359,7 @@ export default function CashRegister() {
                     <div className="col-span-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider text-right">{language === 'pt' ? 'Diferença' : 'Difference'}</div>
                     <div className="col-span-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{language === 'pt' ? 'Estado' : 'Status'}</div>
                   </div>
-                  <div className="divide-y divide-[#334155]/50">
+                  <div className="divide-y divide-border/50">
                     {history.map(cash => (
                       <div key={cash.id} className="grid grid-cols-12 gap-2 px-4 py-2.5 items-center hover:bg-white/[0.02] transition-colors">
                         <div className="col-span-2">

@@ -37,7 +37,7 @@ export default function ExecRevenueChart({ invoices, expenses, language }) {
   const fmt = (v) => v >= 1000 ? `€${(v/1000).toFixed(1)}k` : `€${v}`;
 
   return (
-    <Card style={{ backgroundColor: '#1e293b', borderColor: '#334155' }}>
+    <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
       <CardHeader className="pb-2 pt-5 px-6">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-2">
@@ -92,7 +92,7 @@ export default function ExecRevenueChart({ invoices, expenses, language }) {
             <XAxis dataKey="month" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
             <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} width={45} tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}k` : v} />
             <Tooltip
-              contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
+              contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
               formatter={(v) => [`€${v.toLocaleString()}`, '']}
               labelStyle={{ color: '#94a3b8', fontWeight: 600 }}
             />

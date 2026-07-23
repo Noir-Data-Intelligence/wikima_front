@@ -56,7 +56,7 @@ export default function AcceptInvite() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#1c2d5f' }}>
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'hsl(var(--sidebar-background))' }}>
       <div className="w-full max-w-md text-center">
         {/* Logo */}
         <div className="mb-8">
@@ -66,7 +66,7 @@ export default function AcceptInvite() {
           <p className="text-blue-300 text-sm">Business Management Platform</p>
         </div>
 
-        <div className="rounded-2xl border border-border p-8" style={{ backgroundColor: '#1e293b' }}>
+        <div className="rounded-2xl border border-border p-8" style={{ backgroundColor: 'hsl(var(--card))' }}>
 
           {/* LOADING */}
           {status === 'loading' && (

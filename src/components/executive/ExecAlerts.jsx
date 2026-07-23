@@ -95,7 +95,7 @@ export default function ExecAlerts({ invoices, tasks, clients, language }) {
   }
 
   return (
-    <Card className="h-full" style={{ backgroundColor: '#1e293b', borderColor: '#334155' }}>
+    <Card className="h-full" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
       <CardHeader className="pb-3 pt-5 px-5">
         <div className="flex items-center gap-2">
           <Bell className="w-4 h-4" style={{ color: '#e97c3f' }} />

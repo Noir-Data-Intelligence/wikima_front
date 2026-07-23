@@ -187,7 +187,7 @@ export default function CustomerSupportChat() {
 
       {/* Compact Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-[72px] right-4 w-[300px] max-w-[calc(100vw-2rem)] h-[380px] shadow-2xl flex flex-col z-50 rounded-lg overflow-hidden" style={{ backgroundColor: '#1c2d5f', border: '1px solid rgba(255,255,255,0.2)' }}>
+        <Card className="fixed bottom-[72px] right-4 w-[300px] max-w-[calc(100vw-2rem)] h-[380px] shadow-2xl flex flex-col z-50 rounded-lg overflow-hidden" style={{ backgroundColor: 'hsl(var(--sidebar-background))', border: '1px solid rgba(255,255,255,0.2)' }}>
           {/* Header */}
           <div className="flex items-center justify-between px-3 py-2 flex-shrink-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.15)' }}>
             <div>

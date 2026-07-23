@@ -21,7 +21,7 @@ export default function DeleteConfirmDialog({ open, onClose, onConfirm, title = 
 
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
-      <AlertDialogContent className="bg-[#0d1829] border border-border text-foreground">
+      <AlertDialogContent className="bg-popover border border-border text-foreground">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-foreground">{title}</AlertDialogTitle>
           <AlertDialogDescription className="text-muted-foreground">

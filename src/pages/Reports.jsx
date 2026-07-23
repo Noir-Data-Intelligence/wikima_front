@@ -703,7 +703,7 @@ export default function Reports() {
                   {language === 'pt' ? 'Actividade Recente' : 'Recent Activity'}
                 </span>
               </div>
-              <div className="divide-y divide-[#334155]/60">
+              <div className="divide-y divide-border/60">
                 {recentActivity.length === 0 ? (
                   <div className="py-6 text-center space-y-1">
                     <Activity className="w-5 h-5 text-muted-foreground mx-auto" />
@@ -872,7 +872,7 @@ export default function Reports() {
               { icon: Receipt,     bg: 'bg-green-500/15',  color: 'text-green-400',  label: language === 'pt' ? 'Recibos' : 'Receipts',                     value: receipts.length,   sub: language === 'pt' ? 'registados' : 'logged',    nav: 'Receipts'  },
             ].map((k, i) => (
               <button key={i} onClick={() => navigate(createPageUrl(k.nav))}
-                className="bg-card border border-border rounded-lg px-2.5 py-2.5 flex flex-col items-center gap-1 hover:border-border hover:bg-[#243047] transition-all duration-200 group text-center">
+                className="bg-card border border-border rounded-lg px-2.5 py-2.5 flex flex-col items-center gap-1 hover:border-border hover:bg-accent transition-all duration-200 group text-center">
                 <div className={`w-6 h-6 rounded-md ${k.bg} flex items-center justify-center`}>
                   <k.icon className={`w-3 h-3 ${k.color}`} />
                 </div>
@@ -954,7 +954,7 @@ export default function Reports() {
                   {language === 'pt' ? 'Caixa & Banca' : 'Cash & Banks'}
                 </span>
               </div>
-              <div className="divide-y divide-[#334155]/60">
+              <div className="divide-y divide-border/60">
                 {[
                   { label: language === 'pt' ? 'Contas ativas' : 'Active accounts',           value: activeBankAccounts,       alert: false },
                   { label: language === 'pt' ? 'Extractos OK' : 'Statements OK',              value: statementsReceived,       alert: false },

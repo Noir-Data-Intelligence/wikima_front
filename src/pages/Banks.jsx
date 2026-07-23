@@ -227,7 +227,7 @@ export default function Banks() {
                     )}
                   </div>
                 ) : (
-                  <div className="divide-y divide-[#334155]">
+                  <div className="divide-y divide-border">
                     {filteredAccounts.map(account => {
                       const missing = getMissingStatements(account);
                       const acctStmts = getAccountStatements(account.id);
@@ -306,7 +306,7 @@ export default function Banks() {
                     <p className="text-xs text-muted-foreground">{language === 'pt' ? 'Nenhum extracto carregado.' : 'No statements uploaded yet.'}</p>
                   </div>
                 ) : (
-                  <div className="divide-y divide-[#334155]">
+                  <div className="divide-y divide-border">
                     {statements.slice(0, 20).map(s => (
                       <div key={s.id} className="grid grid-cols-12 gap-2 px-4 py-3 items-center hover:bg-white/[0.02] transition-colors">
                         <div className="col-span-3 flex items-center gap-2">

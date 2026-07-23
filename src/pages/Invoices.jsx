@@ -875,7 +875,7 @@ export default function Invoices() {
             </Button>
           </div>
         ) : (
-          <div className="divide-y divide-[#334155]/50">
+          <div className="divide-y divide-border/50">
             {filteredInvoices.map((invoice) => (
               <InvoiceTableRow
                 key={invoice.id}

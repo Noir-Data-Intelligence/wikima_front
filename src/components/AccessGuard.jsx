@@ -16,7 +16,7 @@ export default function AccessGuard({ page, children }) {
 
   if (!canAccess(page)) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#0f172a' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--background))' }}>
         <div className="text-center max-w-sm px-6">
           <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
             style={{ backgroundColor: 'rgba(233,124,63,0.15)' }}>

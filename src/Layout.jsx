@@ -71,7 +71,7 @@ function LayoutContent({ children, currentPageName }) {
 
   // If it's a public page, just render children without any app layout
   if (isPublicPage) {
-    return <div className="min-h-screen" style={{ backgroundColor: '#1c2d5f' }}>
+    return <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--sidebar-background))' }}>
       {children}
     </div>;
   }
@@ -79,7 +79,7 @@ function LayoutContent({ children, currentPageName }) {
   // Show loading state while checking auth
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#1c2d5f' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--sidebar-background))' }}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: '#e97c3f' }}></div>
           <p className="text-foreground">Loading...</p>
@@ -90,7 +90,7 @@ function LayoutContent({ children, currentPageName }) {
 
   // Authenticated app pages - show with sidebar and demo mode features
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#1c2d5f' }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--sidebar-background))' }}>
       {/* Demo Mode Banner - Only show in authenticated app */}
       {isDemoMode && <DemoModeBanner />}
 

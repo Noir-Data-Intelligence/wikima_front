@@ -116,7 +116,7 @@ export default function TaskRow({ task, onEdit, onStatusChange, language, userTy
             onStatusChange(task, e.target.value);
           }}
           onClick={(e) => e.stopPropagation()}
-          className={`text-[10px] px-2 py-1 rounded border cursor-pointer ${STATUS_COLORS[task.status]} bg-[#111827] focus:outline-none`}
+          className={`text-[10px] px-2 py-1 rounded border cursor-pointer ${STATUS_COLORS[task.status]} bg-card focus:outline-none`}
         >
           <option value="todo">{statusLabels.todo}</option>
           <option value="in_progress">{statusLabels.in_progress}</option>

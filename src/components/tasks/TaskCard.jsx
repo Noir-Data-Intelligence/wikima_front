@@ -22,7 +22,7 @@ export default function TaskCard({ task, onEdit, language }) {
   return (
     <div
       onClick={() => onEdit(task)}
-      className="p-2.5 rounded border border-border bg-[#111827] hover:border-border transition-all cursor-pointer"
+      className="p-2.5 rounded border border-border bg-card hover:border-border transition-all cursor-pointer"
     >
       <div className="flex items-start justify-between gap-1.5 mb-1.5">
         <div className="flex items-center gap-1.5 flex-1 min-w-0">

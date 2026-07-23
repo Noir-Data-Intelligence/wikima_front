@@ -515,7 +515,7 @@ export default function Services() {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#334155]">
+                    <tbody className="divide-y divide-border">
                       {filteredServices.map((service) => (
                         <tr key={service.id} className="hover:bg-background/50 transition-colors">
                           <td className="px-4 py-3">

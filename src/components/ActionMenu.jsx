@@ -19,7 +19,7 @@ export default function ActionMenu({ onEdit, onDelete, onDuplicate, onArchive, o
           </svg>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-[#0d1829] border border-border rounded-xl shadow-xl">
+      <DropdownMenuContent align="end" className="bg-popover border border-border rounded-xl shadow-xl">
         {onEdit && (
           <DropdownMenuItem onClick={onEdit} className="text-muted-foreground hover:text-foreground hover:bg-accent/50 cursor-pointer">
             <Pencil className="w-4 h-4 mr-2" />

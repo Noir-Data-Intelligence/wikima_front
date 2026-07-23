@@ -305,7 +305,7 @@ export default function ClientProfile() {
                     <button className="text-xs px-2.5 py-1 rounded-full border border-dashed border-border text-muted-foreground hover:text-muted-foreground hover:border-white/30 transition-all flex items-center gap-1">
                       <Tag className="w-3 h-3" />{pt ? 'Tag' : 'Tag'}
                     </button>
-                    <div className="absolute top-8 left-0 z-30 hidden group-hover:flex flex-col bg-[#1e2d4a] border border-border rounded-xl shadow-xl p-2 min-w-36 gap-0.5">
+                    <div className="absolute top-8 left-0 z-30 hidden group-hover:flex flex-col bg-popover border border-border rounded-xl shadow-xl p-2 min-w-36 gap-0.5">
                       {TAG_OPTIONS.filter(t => !(client.tags || []).includes(t)).map(tag => (
                         <button key={tag} onClick={() => handleAddTag(tag)} className="text-left text-xs px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors">{tag}</button>
                       ))}

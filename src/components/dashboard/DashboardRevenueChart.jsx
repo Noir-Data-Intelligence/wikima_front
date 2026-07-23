@@ -34,7 +34,7 @@ export default function DashboardRevenueChart({ invoices, expenses, language }) 
   const color = view === 'revenue' ? '#e97c3f' : '#10b981';
 
   return (
-    <Card style={{ backgroundColor: '#1e293b', borderColor: '#334155' }}>
+    <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
       <CardHeader className="pb-2 pt-5 px-5">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-2">
@@ -79,7 +79,7 @@ export default function DashboardRevenueChart({ invoices, expenses, language }) 
             <YAxis stroke="#64748b" fontSize={10} tickLine={false} axisLine={false} width={38}
               tickFormatter={v => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v} />
             <Tooltip
-              contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px', color: '#fff', fontSize: '11px' }}
+              contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: '8px', color: '#fff', fontSize: '11px' }}
               formatter={(v) => [`€${v.toLocaleString()}`, '']}
               labelStyle={{ color: '#94a3b8', fontWeight: 600 }}
             />

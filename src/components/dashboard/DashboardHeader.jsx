@@ -221,7 +221,7 @@ export default function DashboardHeader({ user, tasks = [], invoices = [], docum
                   </div>
 
                   <ScrollArea className="max-h-[420px]">
-                    <div className="divide-y divide-[#334155]/60">
+                    <div className="divide-y divide-border/60">
                       {/* Task assignment notifications */}
                       {taskNotifications.map(n => (
                         <div

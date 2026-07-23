@@ -28,7 +28,7 @@ export default function DashboardTodayAgenda({ events, tasks, language }) {
   const priorityColor = { urgent: '#ef4444', high: '#f97316', medium: '#f59e0b', low: '#10b981' };
 
   return (
-    <Card style={{ backgroundColor: '#1e293b', borderColor: '#334155' }}>
+    <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
       <CardHeader className="pb-3 pt-5 px-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

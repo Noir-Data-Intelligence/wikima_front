@@ -65,7 +65,7 @@ export default function DashboardActivityFeed({ tasks, invoices, clients, docume
     .slice(0, 8);
 
   return (
-    <Card style={{ backgroundColor: '#1e293b', borderColor: '#334155' }}>
+    <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
       <CardHeader className="pb-3 pt-5 px-5">
         <div className="flex items-center gap-2">
           <Activity className="w-4 h-4" style={{ color: '#e97c3f' }} />

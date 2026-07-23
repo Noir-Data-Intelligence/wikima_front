@@ -26,7 +26,7 @@ export default function ExecTeamSnapshot({ teamMembers, tasks, language }) {
   const AVATAR_COLORS = ['#e97c3f','#8b5cf6','#22d3ee','#10b981','#f59e0b'];
 
   return (
-    <Card style={{ backgroundColor: '#1e293b', borderColor: '#334155' }}>
+    <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
       <CardHeader className="pb-3 pt-5 px-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
